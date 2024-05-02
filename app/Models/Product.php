@@ -16,5 +16,17 @@ class Product extends Model
     public function variations(){
         return $this->hasMany(ProductVariation::class);
     }
+
+    public function productImages(){
+        return $this->hasMany(ProductMultiImage::class);
+    }
+
+    public function product3dImage(){
+        return $this->hasOne(Product3dImage::class);
+    }
+
+    public function productVideo(){
+        return $this->hasOne(ProductVideo::class);
+    }
     
 }

@@ -106,4 +106,31 @@ class SubSubCategoryController extends Controller
         //dd($subsubcategory);
         return json_encode($subsubcategory);
     }
+
+    /* active on click */
+    public function inactive($id){
+		$subsubcategory = SubSubCategory::findOrFail($id);
+        $subsubcategory->status = 0;
+        $subsubcategory->save();
+		$notification = array(
+		   'message' => 'Sub Sub Category Inactive',
+		   'alert-type' => 'success'
+	    );
+
+	   return redirect()->back()->with($notification);
+	}
+
+    /* inactive on click */
+ 	public function active($id){
+        $subsubcategory = SubSubCategory::findOrFail($id);
+        $subsubcategory->status = 1;
+        $subsubcategory->save();
+		$notification = array(
+		   'message' => 'Sub Sub Category Active',
+		   'alert-type' => 'success'
+	    );
+
+	   return redirect()->back()->with($notification);
+		
+	}
 }

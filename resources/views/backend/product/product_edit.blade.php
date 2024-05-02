@@ -169,6 +169,232 @@
                             </div> {{-- end col-md-12 --}}
                         </div> {{-- end 4th row --}}
 
+                        {{-- 3d image --}}
+                        <div class="row" style="position: relative"> {{-- start 5th row --}}
+                            <div class="col-md-12" id="canvas_container">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Product 3d Model <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="file" name="product_3d" value="" class="form-control" onChange="product_3d(this)"> <div class="help-block"></div>
+                                                <input type="hidden" name="old_product_3d" value="{{ optional($product->product3dImage)->id }}">
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                </div>
+                                
+                                @if ($product->product3dImage)
+                                <canvas class="webgl" ></canvas>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Scale X <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="scale_x" value="{{ $product->product3dImage ? $product->product3dImage->scale_x : '' }}" class="form-control" onChange=""> <div class="help-block"></div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Scale Y <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="scale_y" value="{{ $product->product3dImage ? $product->product3dImage->scale_y : '' }}" class="form-control" onChange=""> <div class="help-block"></div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Scale Z <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="scale_z" value="{{ $product->product3dImage ? $product->product3dImage->scale_z : '' }}" class="form-control" onChange=""> <div class="help-block"></div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                </div> {{-- end inner row --}}
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Background Color <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="background" value="{{ $product->product3dImage ? $product->product3dImage->background : '' }}" class="form-control" onChange=""> <div class="help-block">e.g.: 0xffffff</div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Directional Light Color <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="directional_light_color" value="{{ $product->product3dImage ? $product->product3dImage->directional_light_color : '' }}" class="form-control" onChange=""> <div class="help-block">e.g.: 0xffffff</div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Directional Light Opacity <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="directional_light_opacity" value="{{ $product->product3dImage ? $product->product3dImage->directional_light_opacity : '' }}" class="form-control" onChange=""> <div class="help-block"></div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                </div> {{-- end inner row --}}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <h5>Ambient Light Color <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="ambient_light_color" value="{{ $product->product3dImage ? $product->product3dImage->ambient_light_color : '' }}" class="form-control" onChange=""> <div class="help-block">e.g.: 0xffffff</div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <h5>Ambient Light Opacity <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="ambient_light_opacity" value="{{ $product->product3dImage ? $product->product3dImage->ambient_light_opacity : '' }}" class="form-control" onChange=""> <div class="help-block"></div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                </div> {{-- end inner row --}}
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Target X <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="target_x" value="{{ $product->product3dImage ? $product->product3dImage->target_x : '' }}" class="form-control" onChange=""> <div class="help-block"></div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Target Y <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="target_y" value="{{ $product->product3dImage ? $product->product3dImage->target_y : '' }}" class="form-control" onChange=""> <div class="help-block"></div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <h5>Target Z <span class="text-danger"></span></h5>
+                                            <div class="controls">
+                                                <input type="text" name="target_z" value="{{ $product->product3dImage ? $product->product3dImage->target_z : '' }}" class="form-control" onChange=""> <div class="help-block"></div>
+                                            </div>
+                                            
+                                            @error('product_3d')
+                                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                            @enderror
+                                        </div> {{-- end form group --}}
+                                    </div>
+                                </div> {{-- end inner row --}}
+                                @endif
+                            </div>{{-- end col-md-12 --}}
+                        </div> {{-- end 5th row --}}
+<hr>
+                        {{-- video --}}
+                        <div class="row pb-3"> {{-- start 6th row --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Product Video Embed Code <span class="text-danger"></span></h5>
+                                    <div class="controls">
+                                        <textarea name="embed_code" class="form-control" onchange="loadVideo(this)">{{ optional($product->productVideo)->embed_code }}</textarea> <div class="help-block"></div>
+                                    </div>
+                                    
+                                    @error('embed_code')
+                                    <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                    @enderror
+                                </div> {{-- end form group --}}
+                                <div class="video_container" style="width: 500px; {{ optional($product->productVideo)->embed_code ? 'height: 300px;' : '' }}">
+                                    {!! optional($product->productVideo)->embed_code !!}
+                                </div>
+                            </div> {{-- end col-md-4 --}}
+                        </div> {{-- end 6th row --}}
+
+                        <div class="row pb-3"> {{-- start 6th row --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Product Video Upload <span class="text-danger"></span></h5>
+                                    <div class="controls">
+                                        <input type="file" name="video" value="" class="form-control">  <div class="help-block"></div>
+                                    </div>
+                                    
+                                    @error('video')
+                                    <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                    @enderror
+                                </div> {{-- end form group --}}
+                                @if (optional($product->productVideo)->video_source)
+                                <video width="400" controls>
+                                    <source src="{{ optional($product->productVideo)->video_source ? asset($product->productVideo->video_source) : '' }}" type="video/mp4">
+                                    Your browser does not support HTML video.
+                                </video>
+                                @endif
+                            </div> {{-- end col-md-6 --}}
+                        </div> {{-- end 6th row --}}
+                        
+                        <div class="row"> {{-- start 6th row --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Video Priority <span class="text-danger"></span></h5>
+                                    <div class="controls">
+                                        <input name="video_priority" type="radio" id="embeded" class="radio-col-primary" value="1" {{ optional($product->productVideo)->video_priority == 1 ? "checked" : "" }}>
+						                <label for="embeded" class="">Embeded Video</label> 
+                                        <span style="margin-right:30px"></span> 
+                                        <input name="video_priority" type="radio" id="uploaded" class="radio-col-primary" value="2" {{ optional($product->productVideo)->video_priority == 2 ? "checked" : "" }}>
+						                <label for="uploaded">Uploaded Video</label>
+                                    </div>
+                                    
+                                    
+                                    @error('video_priority')
+                                    <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                    @enderror
+                                </div> {{-- end form group --}}
+                            </div> {{-- end col-md-6 --}}
+                        </div> {{-- end 6th row --}}
+
+
                     @php
                         $allSizes = "";
                         $colors = [];
@@ -230,9 +456,12 @@
                                         </div>
                                     </div> {{-- end form group --}}
                                 </div>
-                                <div class="col-md-4 d-flex flex-column justify-content-end">
-                                    <div class="form-group">
-                                        <a type="button" class="btn btn-rounded btn-warning add-color-row">Add more</a>
+                                <div class="col-md-4 d-flex  align-items-end">
+                                    <div class="form-group pr-3">
+                                        <a type="button" class="btn btn-rounded btn-warning add-color-row" onclick="addRow(this)">Add more</a>
+                                    </div>
+                                    <div class="form-group pr-3">
+                                        <a type="button" class="btn btn-rounded btn-danger remove-color-row" onclick="removeThisRow(this)">Remove</a>
                                     </div>
                                 </div>
                             </div> {{-- end 6th row --}}
@@ -275,7 +504,7 @@
                         <div class="row"> {{-- start 7th row --}}
                             <div class="col-md-4 d-flex flex-column justify-content-end">
                                 <div class="form-group">
-                                    <a id="add_prices_btn" class="btn btn-rounded btn-warning">Create Variation</a>
+                                    <a id="add_prices_btn" class="btn btn-rounded btn-warning">Add Prices</a>
                                     
                                 </div>
                             </div>
@@ -339,7 +568,7 @@
                                         <div class="form-group">
                                             <h5>Images <span class="text-danger">*</span></h5>
                                             <div class="controls">
-                                                <input type="file" name="${combination.size}_${combination.color}[]" class="form-control" multiple onchange="previewImages(this, '${combination.size}-${combination.color}');" readonly>
+                                                <input type="file" name="${combination.size}_${combination.color}[]" class="form-control" multiple onchange="previewImages(this, '${combination.size}-${combination.color}');" readonly disabled>
                                                 <div class="help-block"></div>
                                             </div>
                                     
@@ -476,13 +705,13 @@
 
 {{-- scripts to add color row on click "add more" button --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    
         const colorContainer = document.querySelector('.color-container');
         const addColorRowButtons = document.querySelectorAll('.add-color-row');
 
-        addColorRowButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const colorRow = document.createElement('div');
+        //addColorRowButtons.forEach(button => {
+             function addRow() {
+                let colorRow = document.createElement('div');
                 colorRow.classList.add('row');
                 colorRow.innerHTML = `
                         <div class="col-md-4">
@@ -508,23 +737,86 @@
                         </div>
                 `;
 
-                const removeButton = colorRow.querySelector('.remove-color-row');
-                removeButton.addEventListener('click', function () {
+                let removeButton = colorRow.querySelector('.remove-color-row');
+                removeButton.addEventListener('click', function (event) {
+                    
                     colorRow.remove();
+                    let btn = event.target;
+                    // Get all the remove buttons
+                    let removeButtons = document.querySelectorAll('.color-container .remove-color-row');
+                    // If there's only one remove button, disable it
+                    if (removeButtons.length < 2) {
+                        removeButtons[0].setAttribute('disabled', true);
+                        removeButtons[0].setAttribute('onClick', "");
+                        removeButtons[0].classList.add('disabled');
+                        
+                    }
+                    
                 });
 
                 colorContainer.appendChild(colorRow);
-            });
-        });
+
+                // Get all the remove buttons
+                let removeButtons = document.querySelectorAll('.color-container .remove-color-row');
+                console.log(removeButtons.length);
+                // If there's only one remove button, disable it
+                if (removeButtons.length > 1) {
+                    removeButtons[0].setAttribute('disabled', false);
+                    removeButtons[0].setAttribute('onClick', "removeThisRow(this)");
+                    removeButtons[0].classList.remove('disabled');
+                    
+                }
+            };
+        //});
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get all the remove buttons
+        let removeButtons = document.querySelectorAll('.color-container .remove-color-row');
+        // If there's only one remove button, disable it
+        if (removeButtons.length < 2) {
+            removeButtons[0].setAttribute('disabled', true);
+            removeButtons[0].setAttribute('onClick', "");
+            removeButtons[0].classList.add('disabled');
+        }
     });
+
 </script>
 
 {{-- remove color row on click remove button --}}
 <script>
     function removeThisRow(btn) {
+        let removeButtonsBefore = document.querySelectorAll('.color-container .remove-color-row');
         // Traverse up the DOM to find the parent row and remove it
         var row = btn.closest('.row');
         row.parentNode.removeChild(row);
+        // Get all the remove buttons
+        let removeButtons = document.querySelectorAll('.color-container .remove-color-row');
+        // if the remove button is first remove button
+        if(btn===removeButtonsBefore[0]){
+            let addButtons = document.querySelectorAll('.color-container .add-color-row');
+            // If no "Add more" button is present, add a new one
+            if (addButtons.length === 0) {
+                var addButtonHTML = '<div class="form-group pr-3">' +
+                                        '<a type="button" class="btn btn-rounded btn-warning add-color-row" onclick="addRow(this)">Add more</a>' +
+                                    '</div>' ;
+                let parentElement = removeButtons[0].parentNode.parentNode;
+                parentElement.className = '';
+                parentElement.classList.add('col-md-4', 'd-flex', 'align-items-end');
+                parentElement.insertAdjacentHTML('afterbegin', addButtonHTML);
+                console.log(addButtons.length);
+            }
+        }
+
+        // If there's only one remove button, disable it
+        if (removeButtons.length === 1) {
+            removeButtons[0].setAttribute('disabled', true);
+            removeButtons[0].setAttribute('onClick', "");
+            removeButtons[0].classList.add('disabled');
+            console.log("length "+removeButtons.length);
+            
+        }
+        
+
     }
 </script>
 
@@ -575,74 +867,7 @@
         });
 
         // Generate rows for each combination
-        /* var combinationRows = combinations.map(function(combination) {
-            var variation = document.createElement("div");
-            variation.classList.add("variation");
-            variation.innerHTML = `
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <h5>Size <span class="text-danger">*</span></h5>
-                            <div class="controls">
-                                <input type="text" name="size" value="${combination.size}" class="form-control">
-                                <div class="help-block"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <h5>Color Name <span class="text-danger">*</span></h5>
-                            <div class="controls">
-                                <input type="text" name="color" value="${combination.color}" class="form-control">
-                                <div class="help-block"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <h5>Quantity <span class="text-danger">*</span></h5>
-                            <div class="controls">
-                                <input type="number" name="quantity[]" value="{{$variation->size ?? ""}}" class="form-control">
-                                <div class="help-block"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <h5>Selling Price <span class="text-danger">*</span></h5>
-                            <div class="controls">
-                                <input type="number" name="selling_price[]" value="" class="form-control">
-                                <div class="help-block"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <h5>Discount Price <span class="text-danger">*</span></h5>
-                            <div class="controls">
-                                <input type="number" name="discount_price[]" value="" class="form-control">
-                                <div class="help-block"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <h5>Images <span class="text-danger">*</span></h5>
-                            <div class="controls">
-                                <input type="file" name="${combination.size}_${combination.color}[]" class="form-control" multiple onchange="previewImages(this, '${combination.size}-${combination.color}');">
-                                <div class="help-block"></div>
-                            </div>
-                            <div id="preview_${combination.size}-${combination.color}" class="preview-images"></div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                `;
-            return variation;
-        }); */
+        
 
         var combinationRows = combinations.map(function(combination) {
             // Find corresponding variation from PHP data
@@ -796,6 +1021,44 @@
     }
 </script>
 
+
+/* 3d model */
+<script>
+    var product3dImage = {!! json_encode($product->product3dImage ?? null) !!};
+    console.log(product3dImage.image_source);
+    if(product3dImage != null){
+        var modelPath = "{{ asset('') }}";
+        modelPath += product3dImage.image_source;
+        console.log(modelPath);
+        var scaleX = product3dImage.scale_x;
+        var scaleY = product3dImage.scale_y;
+        var scaleZ = product3dImage.scale_z;
+        var background = product3dImage.background;
+        var directional_light_color = product3dImage.directional_light_color;
+        var directional_light_opacity = product3dImage.directional_light_opacity;
+        var ambient_light_color = product3dImage.ambient_light_color;
+        var ambient_light_opacity = product3dImage.ambient_light_opacity;
+        var target_x = product3dImage.target_x;
+        var target_y = product3dImage.target_y;
+        var target_z = product3dImage.target_z;
+    }
+</script>
+
+<script type="module" src="{{ asset('backend/js/editProduct3dModel.js') }}"></script>
+
+{{-- load embeded video --}}
+<script>
+    function loadVideo(input) {
+        // Get the value of the input field
+        let embedCode = input.value;
+
+        // Get the video container element
+        let videoContainer = document.querySelector('.video_container');
+
+        videoContainer.innerHTML=embedCode;
+        videoContainer.style.height = '281.25px';
+    }
+</script>
 
 
 

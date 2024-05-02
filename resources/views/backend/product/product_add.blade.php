@@ -124,7 +124,7 @@
                                 <div class="form-group">
                                     <h5>Product Thumbnail <span class="text-danger"></span></h5>
                                     <div class="controls">
-                                        <input type="file" name="product_thumbnail" value="" class="form-control" onChange="mainThumbUrl(this)"> <div class="help-block"></div>
+                                        <input type="file" name="product_thumbnail" value="{{ old('product_thumbnail') }}" class="form-control" onChange="mainThumbUrl(this)"> <div class="help-block"></div>
                                     </div>
                                     <img src="" alt="" id="mainThumb">
                                     @error('product_thumbnail')
@@ -136,7 +136,7 @@
                                 <div class="form-group">
                                     <h5>Short Description <span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <textarea name="short_desc" id="textarea" class="form-control"></textarea> <div class="help-block"></div>
+                                        <textarea name="short_desc" id="textarea" class="form-control">{{ old('product_thumbnail') }}</textarea> <div class="help-block"></div>
                                     </div>
                                     @error('short_desc')
                                     <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
@@ -161,8 +161,77 @@
                             </div> {{-- end col-md-12 --}}
                         </div> {{-- end 4th row --}}
 
+                        <div class="row"> {{-- start 5th row --}}
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Product 3d Model <span class="text-danger"></span></h5>
+                                    <div class="controls">
+                                        <input type="file" name="product_3d" value="" class="form-control"> <div class="help-block"></div>
+                                    </div>
+                                    
+                                    @error('product_3d')
+                                    <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                    @enderror
+                                </div> {{-- end form group --}}
+                            </div> {{-- end col-md-4 --}}
+                        </div> {{-- end 5th row --}}
 
-                        <div class="row"> {{-- start 4th row --}}
+
+                        <div class="row pb-3"> {{-- start 6th row --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Product Video Embed Code <span class="text-danger"></span></h5>
+                                    <div class="controls">
+                                        <textarea name="embed_code" class="form-control" onchange="loadVideo(this)">{{ old('embed_code') }}</textarea> <div class="help-block"></div>
+                                    </div>
+                                    
+                                    @error('embed_code')
+                                    <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                    @enderror
+                                </div> {{-- end form group --}}
+                                <div class="video_container" style="width: 500px;">
+                                </div>
+                            </div> {{-- end col-md-4 --}}
+                        </div> {{-- end 6th row --}}
+
+                        <div class="row pb-3"> {{-- start 6th row --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Product Video Upload <span class="text-danger"></span></h5>
+                                    <div class="controls">
+                                        <input type="file" name="video" value="" class="form-control">  <div class="help-block"></div>
+                                    </div>
+                                    
+                                    @error('video')
+                                    <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                    @enderror
+                                </div> {{-- end form group --}}
+                                
+                            </div> {{-- end col-md-6 --}}
+                        </div> {{-- end 6th row --}}
+                        
+                        <div class="row pb-3"> {{-- start 6th row --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Video Priority <span class="text-danger"></span></h5>
+                                    <div class="controls">
+                                        <input name="video_priority" type="radio" id="embeded" class="radio-col-primary" value="1" checked="">
+						                <label for="embeded" class="">Embeded Video</label> 
+                                        <span style="margin-right:30px"></span> 
+                                        <input name="video_priority" type="radio" id="uploaded" class="radio-col-primary" value="2">
+						                <label for="uploaded">Uploaded Video</label>
+                                    </div>
+                                    
+                                    
+                                    @error('video')
+                                    <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
+                                    @enderror
+                                </div> {{-- end form group --}}
+                            </div> {{-- end col-md-6 --}}
+                        </div> {{-- end 6th row --}}
+
+
+                        <div class="row"> {{-- start 6th row --}}
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Product Sizes <span class="text-danger">*</span></h5>
@@ -174,7 +243,7 @@
                                     @enderror
                                 </div> {{-- end form group --}}
                             </div>{{-- end col-md-4 --}}
-                        </div> {{-- end 4th row --}}
+                        </div> {{-- end 6th row --}}
 
                         <div class="color-container">
                             <div class="row"> {{-- start 6th row --}}
@@ -387,8 +456,8 @@
         var productSizesArray = productSizesValue.split(",");
         var productColors = []; // Example colors
         var combinations = [];
-        console.log(productSizesValue);
-        console.log(productSizesArray);
+        //console.log(productSizesValue);
+        //console.log(productSizesArray);
 
         // Select all color rows
         var colorRows = document.querySelectorAll(".color-container .row");
@@ -407,8 +476,8 @@
             productColors.push(colorName);
 
             // Log values to the console
-            console.log("Color Name:", colorName);
-            console.log("Color Code:", colorCode);
+            //console.log("Color Name:", colorName);
+            //console.log("Color Code:", colorCode);
         });
 
         // Generate combinations for each size-color pair
@@ -428,7 +497,7 @@
                         <div class="form-group">
                             <h5>Size <span class="text-danger">*</span></h5>
                             <div class="controls">
-                                <input type="text" name="size" value="${combination.size}" class="form-control">
+                                <input type="text" name="size" value="${combination.size}" class="form-control" readonly>
                                 <div class="help-block"></div>
                             </div>
                         </div>
@@ -437,7 +506,7 @@
                         <div class="form-group">
                             <h5>Color Name <span class="text-danger">*</span></h5>
                             <div class="controls">
-                                <input type="text" name="color" value="${combination.color}" class="form-control">
+                                <input type="text" name="color" value="${combination.color}" class="form-control" readonly>
                                 <div class="help-block"></div>
                             </div>
                         </div>
@@ -517,6 +586,20 @@
     }
 </script>
 
+
+{{-- load embeded video --}}
+<script>
+    function loadVideo(input) {
+        // Get the value of the input field
+        let embedCode = input.value;
+
+        // Get the video container element
+        let videoContainer = document.querySelector('.video_container');
+
+        videoContainer.innerHTML=embedCode;
+        videoContainer.style.height = '281.25px';
+    }
+</script>
 
 
 

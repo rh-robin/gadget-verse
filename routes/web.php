@@ -181,3 +181,6 @@ Route::get('/product/details/{id}/{slug}', [IndexController::class, 'ProductDeta
 
 
 
+Route::get('/phpinfo', function () {
+    phpinfo();
+});

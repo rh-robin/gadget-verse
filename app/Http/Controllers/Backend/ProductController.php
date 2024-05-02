@@ -13,6 +13,8 @@ use App\Models\Brand;
 use App\Models\ProductVariation;
 use App\Models\ProductStock;
 use App\Models\ProductMultiImage;
+use App\Models\Product3dImage;
+use App\Models\ProductVideo;
 use Carbon\Carbon;
 
 use Intervention\Image\ImageManager;
@@ -33,6 +35,7 @@ class ProductController extends Controller
 
 
 	public function store(Request $request){
+		//dd($request->product_3d);
         // Validate incoming request
         $request->validate([
             'brand_id' => 'required|exists:brands,id',
@@ -54,6 +57,7 @@ class ProductController extends Controller
             'special_offer' => 'nullable|boolean',
             'special_deals' => 'nullable|boolean',
             'product_thumbnail' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+			'video' =>'mimes:mp4'
         ]);
 
         // Save product data
@@ -85,6 +89,7 @@ class ProductController extends Controller
 			$save_url = 'upload/products/thumbnail/' . $fileName;
 			$product->product_thumbnail = $save_url;
 		}
+
 		
 
         // Save product flags
@@ -94,6 +99,37 @@ class ProductController extends Controller
         $product->special_deals = $request->has('special_deals');
 		
 		$product->save();
+
+		/* process the product 3d image */
+		if ($request->hasFile('product_3d')) {
+			$product3DFile = $request->file('product_3d');
+			$fileName = hexdec(uniqid()) . '.' . $request->file('product_3d')->getClientOriginalExtension();
+			$file_url = 'upload/products/3d_model/'.$fileName;
+            $product3DFile->move(public_path('upload/products/3d_model'), $fileName);
+			$product3dImage = new Product3dImage();
+			$product3dImage->product_id = $product->id;
+			$product3dImage->image_source = $file_url;
+			$product3dImage->save();
+		}
+
+		/* process the product video */
+		if ($request->hasFile('video') || $request->embed_code) {
+			$productVideo = new ProductVideo();
+			$productVideo->product_id = $product->id;
+			if($request->hasFile('video')){
+				$videoFile = $request->file('video');
+				$fileName = hexdec(uniqid()) . '.' . $request->file('video')->getClientOriginalExtension();
+				$file_url = 'upload/products/video/'.$fileName;
+				$videoFile->move(public_path('upload/products/video'), $fileName);
+				$productVideo->video_source = $file_url;
+			}
+			if($request->embed_code){
+				$productVideo->embed_code = $request->embed_code;
+			}
+			$productVideo->video_priority = $request->video_priority;
+			$productVideo->save();
+		}
+		
 		
 		$product_sizes = explode(",",$request->product_sizes);
 
@@ -214,6 +250,7 @@ class ProductController extends Controller
             'special_offer' => 'nullable|boolean',
             'special_deals' => 'nullable|boolean',
             'product_thumbnail' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+			'video' => 'mimes:mp4',
         ]);
 
         // Save product data
@@ -258,12 +295,85 @@ class ProductController extends Controller
         $product->special_deals = $request->has('special_deals');
 		
 		$product->save();
+
+		/* process the product 3d image */
+		$oldProduct3dId = $request->old_product_3d;
+		$product3dImage = Product3dImage::find($oldProduct3dId);
+		if ($request->hasFile('product_3d')) {
+			$product3DFile = $request->file('product_3d');
+			//dd($product3DFile);
+			$fileName = hexdec(uniqid()) . '.' . $request->file('product_3d')->getClientOriginalExtension();
+			$file_url = 'upload/products/3d_model/'.$fileName;
+            $product3DFile->move(public_path('upload/products/3d_model'), $fileName);
+			
+			if($product3dImage){
+				unlink($product3dImage->image_source);
+			}else{
+				$product3dImage = new Product3dImage();
+			}
+			
+			$product3dImage->product_id = $product->id;
+			$product3dImage->image_source = $file_url;
+			
+			
+		}
+		if ($product3dImage !== null) {
+			$product3dImage->background =  $request->filled('background') ? $request->background : '0xffffff';
+			$product3dImage->scale_x = $request->filled('scale_x') ? $request->scale_x : 0.04;
+			$product3dImage->scale_y = $request->filled('scale_y') ? $request->scale_y : 0.04;
+			$product3dImage->scale_z = $request->filled('scale_z') ? $request->scale_z : 0.04;
+			$product3dImage->directional_light_color = $request->filled('directional_light_color') ? $request->directional_light_color : '0xffffff';
+			$product3dImage->directional_light_opacity = $request->filled('directional_light_opacity') ? $request->directional_light_opacity : 5;
+			$product3dImage->ambient_light_color = $request->filled('ambient_light_color') ? $request->ambient_light_color : '0xffffff';
+			$product3dImage->ambient_light_opacity = $request->filled('ambient_light_opacity') ? $request->ambient_light_opacity : 3;
+			$product3dImage->target_x = $request->filled('target_x') ? $request->target_x : 0;
+			$product3dImage->target_y = $request->filled('target_y') ? $request->target_y : 1;
+			$product3dImage->target_z = $request->filled('target_z') ? $request->target_z : 0;
+			$product3dImage->save();
+		}
+		
+
+
+		/* process the product vide0 */
+		$productVideo = ProductVideo::where('product_id', $product->id)->first();
+		
+		if ($request->hasFile('video')) {
+			$videoFile = $request->file('video');
+			$fileName = hexdec(uniqid()) . '.' . $request->file('video')->getClientOriginalExtension();
+			$file_url = 'upload/products/video/'.$fileName;
+            $videoFile->move(public_path('upload/products/video'), $fileName);
+			if($productVideo){
+				if($productVideo->video_source){
+					unlink($productVideo->video_source);
+				}
+			}
+			if($productVideo == null){
+				$productVideo = new ProductVideo();
+				$productVideo->product_id = $product->id;
+			}
+			$productVideo->video_source = $file_url;
+			$productVideo->save();
+		}
+		if($request->embed_code){
+			if($productVideo == null){
+				$productVideo = new ProductVideo();
+				$productVideo->product_id = $product->id;
+			}
+			$productVideo->embed_code = $request->embed_code == null ? null : $request->embed_code;
+		}
+		if($productVideo !== null){
+			$productVideo->video_priority = $request->video_priority;
+			$productVideo->save();
+		}
+		
+
 		
 		$product_sizes = explode(",", $request->product_sizes);
 		$product_colors = $request->color_names;
 
 		// Delete variations with sizes not included in $product_sizes
-		$variationsToDelete = ProductVariation::whereNotIn('size', $product_sizes)->get();
+		$variationsToDelete = ProductVariation::whereNotIn('size', $product_sizes)->where("product_id", $product->id)->get();
+		
 		foreach ($variationsToDelete as $variation) {
 			foreach ($variation->images as $image) {
 				unlink($image->image_source); // Unlink associated multi-images
@@ -273,7 +383,8 @@ class ProductController extends Controller
 		}
 
 		// Delete variations with color names not included in $product_colors
-		$variationsToDelete = ProductVariation::whereNotIn('color_name', $product_colors)->get();
+		$variationsToDelete = ProductVariation::whereNotIn('color_name', $product_colors)->where("product_id", $product->id)->get();
+		//dd($variationsToDelete);
 		foreach ($variationsToDelete as $variation) {
 			foreach ($variation->images as $image) {
 				unlink($image->image_source); // Unlink associated multi-images
@@ -294,7 +405,7 @@ class ProductController extends Controller
 				$colorName = $color_name;
 				$colorCode = $request->color_codes[$index];
 				
-				$variation = ProductVariation::where("size",$size)->where("color_name",$colorName)->first();
+				$variation = ProductVariation::where("size",$size)->where("color_name",$colorName)->where("product_id", $product->id)->first();
 
 				/* check the variation is already exist or not */
 				if($variation){
@@ -375,100 +486,6 @@ class ProductController extends Controller
     }
 
 
-	/// Multiple Image Update
-	public function multiImgUpdate(Request $request){
-		if ($request->hasFile('multi_img')) {
-			$imgs = $request->multi_img;
-
-			foreach ($imgs as $id => $img) {
-				$imgDel = MultiImg::findOrFail($id);
-				unlink($imgDel->image_name);
-				$manager = new ImageManager(new Driver());
-				$fileName = hexdec(uniqid()) . '.' . $img->getClientOriginalExtension();
-
-				$image = $manager->read($img);
-				$image = $image->resize(917, 1000);
-
-				$multiImgDirectory = public_path('upload/products/multi-img');
-				File::makeDirectory($multiImgDirectory, $mode = 0777, true, true);
-				$image->toJpeg(80)->save($multiImgDirectory . '/' . $fileName);
-
-				$save_url_multi = 'upload/products/multi-img/' . $fileName;
-
-				$multiImg = MultiImg::findOrFail($id);
-				$multiImg->image_name = $save_url_multi;
-				$multiImg->save();
-
-			} // end foreach
-
-			$notification = array(
-					'message' => 'Product Multi Image Updated Successfully',
-					'alert-type' => 'info'
-			);
-		} else{
-			$notification = array(
-				'message' => 'Please Select New Image To Update',
-				'alert-type' => 'warning'
-			);
-		}/* end if */
-
-		
-		return redirect()->back()->with($notification);
-
-	} // end mehtod 
-
-
-	/// Product Main Thambnail Update /// 
-	public function thumbnailUpdate(Request $request){
-		$pro_id = $request->id;
-		$oldImage = $request->old_img;
-		
-		if ($request->hasFile('product_thumbnail')) {
-			$manager = new ImageManager(new Driver());
-			$fileName = hexdec(uniqid()) . '.' . $request->file('product_thumbnail')->getClientOriginalExtension();
-
-			$image = $manager->read($request->file('product_thumbnail'));
-			$image = $image->resize(917, 1000);
-
-			$thumbnailDirectory = public_path('upload/products/thumbnail');
-			File::makeDirectory($thumbnailDirectory, $mode = 0777, true, true);
-			$image->toJpeg(80)->save($thumbnailDirectory . '/' . $fileName);
-
-			$save_url = 'upload/products/thumbnail/' . $fileName;
-			$product = Product::findOrFail($pro_id);
-			$product->product_thumbnail = $save_url;
-			$product->save();
-			unlink($oldImage);
-
-			$notification = array(
-				'message' => 'Product Thumbnail Image Updated Successfully',
-				'alert-type' => 'info'
-			);
-		}else{
-			$notification = array(
-				'message' => 'Please Select New Image To Update',
-				'alert-type' => 'warning'
-			);
-		} /* end if */
-		return redirect()->back()->with($notification);
-   
-	} // end method
-
-
-	//// Multi Image Delete ////
-	public function multiImgDelete($id){
-		$oldimg = MultiImg::findOrFail($id);
-		unlink($oldimg->image_name);
-		MultiImg::findOrFail($id)->delete();
-
-		$notification = array(
-		   'message' => 'Product Image Deleted Successfully',
-		   'alert-type' => 'success'
-	   );
-
-	   return redirect()->back()->with($notification);
-
-	} // end method 
 
 
 	public function inactive($id){
@@ -497,14 +514,21 @@ class ProductController extends Controller
 	public function delete($id){
 		$product = Product::findOrFail($id);
 		unlink($product->product_thumbnail);
-		Product::findOrFail($id)->delete();
+		
 
-		$images = MultiImg::where('product_id',$id)->get();
-		foreach ($images as $img) {
-			unlink($img->image_name);
+		
+		$video = $product->productVideo;
+		if ($video) {
+			if ($video->video_source) {
+				unlink($video->video_source);
+			}
 		}
-		MultiImg::where('product_id',$id)->delete();
 
+		$images = $product->productImages;
+		foreach ($images as $key => $image) {
+			unlink($image->image_source);
+		}
+		Product::findOrFail($id)->delete();
 		$notification = array(
 		   'message' => 'Product Deleted Successfully',
 		   'alert-type' => 'success'
