@@ -914,7 +914,7 @@
                         <div class="form-group">
                             <h5>Selling Price <span class="text-danger">*</span></h5>
                             <div class="controls">
-                                <input type="number" name="selling_price[]" value="${matchingVariation ? matchingVariation.selling_price : ''}" class="form-control">
+                                <input type="number" required name="selling_price[]" value="${matchingVariation ? matchingVariation.selling_price : ''}" class="form-control">
                                 <div class="help-block"></div>
                             </div>
                         </div>

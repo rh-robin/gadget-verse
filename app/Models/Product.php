@@ -10,6 +10,12 @@ class Product extends Model
     use HasFactory;
     protected $guarded = [];
 
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function stocks(){
         return $this->hasMany(ProductStock::class);
     }
@@ -17,7 +23,7 @@ class Product extends Model
         return $this->hasMany(ProductVariation::class);
     }
 
-    public function productImages(){
+    public function images(){
         return $this->hasMany(ProductMultiImage::class);
     }
 

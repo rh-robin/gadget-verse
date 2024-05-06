@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('size')->nullable();
             $table->string('color_name')->nullable();
             $table->string('color_code')->nullable();
-            $table->string('selling_price')->nullable();
-            $table->string('discount_price')->nullable();
+            $table->integer('selling_price')->nullable();
+            $table->integer('discount_price')->nullable();
             $table->boolean('status')->default(1);
             $table->timestamps();
         });

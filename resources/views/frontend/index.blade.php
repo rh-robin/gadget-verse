@@ -1,7 +1,14 @@
 @extends('frontend.main_master')
+@section('title')
+Gadget Verse | Online Gadget Shop
+@endsection
 @section('content')
 
 <main class="main home mt-2">
+
+
+
+
     <div class="container mb-2">
         <div class="info-boxes-container row row-joined mb-2 font2">
             <div class="info-box info-box-icon-left col-lg-4">
@@ -141,216 +148,246 @@
                 <h2 class="section-title ls-n-10 m-b-4 appear-animate" data-animation-name="fadeInUpShorter">
                     Featured Products</h2>
 
+            
+            
                 <div class="products-slider owl-carousel owl-theme dots-top dots-small m-b-1 pb-1 appear-animate" data-animation-name="fadeInUpShorter">
-                    <div class="product-default inner-quickview inner-icon">
-                        <figure class="img-effect">
-                            <a href="demo1-product.html">
-                                <img src="{{ asset('frontend/assets/images/demoes/demo1/products/product-1.jpg') }}" width="205" height="205" alt="product">
-                                <img src="{{ asset('frontend/assets/images/demoes/demo1/products/product-1-2.jpg') }}" width="205" height="205" alt="product">
+
+
+                    @foreach ($products as $product)
+                    @php
+                        $productVariation = App\Models\ProductVariation::where('product_id', $product->id)->orderBy('discount_price')->first();
+                    @endphp
+                    <div class="product-default appear-animate" data-animation-name="fadeInRightShorter">
+                        <figure>
+                            <a href="{{ route('product.details', [$product->id, $product->product_slug]) }}">
+                                <img src="{{ asset($product->product_thumbnail) }}" width="220" height="220" alt="product">
                             </a>
+                        @php
+                            $amount = $productVariation->selling_price- $productVariation->discount_price;
+                            $discount=null;
+                            if($amount>1){
+                                $discount = ($amount/$productVariation->selling_price)*100;
+                            }
+                        @endphp
+                        @if ($discount == null || $productVariation->discount_price==null)
                             <div class="label-group">
-                                <div class="product-label label-hot">HOT</div>
-                                <div class="product-label label-sale">-20%</div>
+                                <div class="product-label label-hot">NEW</div>
                             </div>
-                            <div class="btn-icon-group">
-                                <a href="demo1-product.html" class="btn-icon btn-add-cart"><i
-                                        class="fa fa-arrow-right"></i>
-                                </a>
-                            </div>
-                            <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                            <div class="product-countdown-container">
-                                <span class="product-countdown-title">offer ends in:</span>
-                                <div class="product-countdown countdown-compact" data-until="2021, 10, 5" data-compact="true">
-                                </div>
-                                <!-- End .product-countdown -->
-                            </div>
-                            <!-- End .product-countdown-container -->
-                        </figure>
-                        <div class="product-details">
-                            <div class="category-wrap">
-                                <div class="category-list">
-                                    <a href="demo1-shop.html" class="product-category">category</a>
-                                </div>
-                                <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish"><i
-                                        class="icon-heart"></i></a>
-                            </div>
-                            <h3 class="product-title"> <a href="demo1-product.html">Black Grey Headset</a> </h3>
-                            <div class="ratings-container">
-                                <div class="product-ratings">
-                                    <span class="ratings" style="width:100%"></span>
-                                    <!-- End .ratings -->
-                                    <span class="tooltiptext tooltip-top"></span>
-                                </div>
-                                <!-- End .product-ratings -->
-                            </div>
-                            <!-- End .product-container -->
-                            <div class="price-box">
-                                <span class="product-price">$9.00</span>
-                            </div>
-                            <!-- End .price-box -->
-                        </div>
-                        <!-- End .product-details -->
-                    </div>
-                    <div class="product-default inner-quickview inner-icon">
-                        <figure class="img-effect">
-                            <a href="demo1-product.html">
-                                <img src="{{ asset('frontend/assets/images/demoes/demo1/products/product-2.jpg') }}" width="205" height="205" alt="product" />
-                            </a>
-                            <div class="btn-icon-group">
-                                <a href="#" title="Add To Cart" class="btn-icon btn-add-cart product-type-simple"><i
-                                        class="icon-shopping-cart"></i></a>
-                            </div>
-                            <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                        </figure>
-                        <div class="product-details">
-                            <div class="category-wrap">
-                                <div class="category-list">
-                                    <a href="demo1-shop.html" class="product-category">category</a>
-                                </div>
-                                <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish"><i
-                                        class="icon-heart"></i></a>
-                            </div>
-                            <h3 class="product-title"> <a href="demo1-product.html">Battery Charger</a> </h3>
-                            <div class="ratings-container">
-                                <div class="product-ratings">
-                                    <span class="ratings" style="width:100%"></span>
-                                    <!-- End .ratings -->
-                                    <span class="tooltiptext tooltip-top"></span>
-                                </div>
-                                <!-- End .product-ratings -->
-                            </div>
-                            <!-- End .product-container -->
-                            <div class="price-box">
-                                <span class="product-price">$9.00</span>
-                            </div>
-                            <!-- End .price-box -->
-                        </div>
-                        <!-- End .product-details -->
-                    </div>
-                    <div class="product-default inner-quickview inner-icon">
-                        <figure class="img-effect">
-                            <a href="demo1-product.html">
-                                <img src="{{ asset('frontend/assets/images/demoes/demo1/products/product-3.jpg') }}" width="205" height="205" alt="product">
-                                <img src="{{ asset('frontend/assets/images/demoes/demo1/products/product-3-2.jpg') }}" width="205" height="205" alt="product">
-                            </a>
+                        @else
                             <div class="label-group">
-                                <div class="product-label label-hot">HOT</div>
-                                <div class="product-label label-sale">-30%</div>
+                                <div class="product-label label-hot bg-danger">-{{ round($discount) }}%</div>
                             </div>
-                            <div class="btn-icon-group">
-                                <a href="#" title="Add To Cart" class="btn-icon btn-add-cart product-type-simple"><i
-                                        class="icon-shopping-cart"></i></a>
-                            </div>
-                            <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
+                        @endif
+                            
                         </figure>
                         <div class="product-details">
-                            <div class="category-wrap">
-                                <div class="category-list">
-                                    <a href="demo1-shop.html" class="product-category">category</a>
-                                </div>
-                                <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish"><i
-                                        class="icon-heart"></i></a>
+                            <div class="category-list">
+                                <a href="category.html" class="product-category">{{ $product->category->category_name }}</a>
                             </div>
-                            <h3 class="product-title"> <a href="demo1-product.html">Brown Bag</a> </h3>
-                            <div class="ratings-container">
-                                <div class="product-ratings">
-                                    <span class="ratings" style="width:100%"></span>
-                                    <!-- End .ratings -->
-                                    <span class="tooltiptext tooltip-top"></span>
-                                </div>
-                                <!-- End .product-ratings -->
-                            </div>
-                            <!-- End .product-container -->
-                            <div class="price-box">
-                                <span class="product-price">$9.00</span>
-                            </div>
-                            <!-- End .price-box -->
-                        </div>
-                        <!-- End .product-details -->
-                    </div>
-                    <div class="product-default inner-quickview inner-icon">
-                        <figure class="img-effect">
-                            <a href="demo1-product.html">
-                                <img src="{{ asset('frontend/assets/images/demoes/demo1/products/product-4.jpg') }}" width="205" height="205" alt="product">
-                                <img src="{{ asset('frontend/assets/images/demoes/demo1/products/product-4-2.jpg') }}" width="205" height="205" alt="product">
-                            </a>
-                            <div class="label-group">
-                                <div class="product-label label-hot">HOT</div>
-                            </div>
-                            <div class="btn-icon-group">
-                                <a href="#" title="Add To Cart" class="btn-icon btn-add-cart product-type-simple"><i
-                                        class="icon-shopping-cart"></i></a>
-                            </div>
-                            <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                        </figure>
-                        <div class="product-details">
-                            <div class="category-wrap">
-                                <div class="category-list">
-                                    <a href="demo1-shop.html" class="product-category">category</a>
-                                </div>
-                                <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish"><i
-                                        class="icon-heart"></i></a>
-                            </div>
-                            <h3 class="product-title"> <a href="demo1-product.html">Casual Note Bag</a> </h3>
-                            <div class="ratings-container">
-                                <div class="product-ratings">
-                                    <span class="ratings" style="width:100%"></span>
-                                    <!-- End .ratings -->
-                                    <span class="tooltiptext tooltip-top"></span>
-                                </div>
-                                <!-- End .product-ratings -->
-                            </div>
-                            <!-- End .product-container -->
-                            <div class="price-box">
-                                <span class="product-price">$9.00</span>
-                            </div>
-                            <!-- End .price-box -->
-                        </div>
-                        <!-- End .product-details -->
-                    </div>
-                    <div class="product-default inner-quickview inner-icon">
-                        <figure class="img-effect">
-                            <a href="demo1-product.html">
-                                <img src="{{ asset('frontend/assets/images/demoes/demo1/products/product-5.jpg') }}" width="205" height="205" alt="product">
-                                <img src="{{ asset('frontend/assets/images/demoes/demo1/products/product-5-2.jpg') }}" width="205" height="205" alt="product">
-                            </a>
-                            <div class="label-group">
-                                <div class="product-label label-hot">HOT</div>
-                            </div>
-                            <div class="btn-icon-group">
-                                <a href="#" title="Add To Cart" class="btn-icon btn-add-cart product-type-simple"><i
-                                        class="icon-shopping-cart"></i></a>
-                            </div>
-                            <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                        </figure>
-                        <div class="product-details">
-                            <div class="category-wrap">
-                                <div class="category-list">
-                                    <a href="demo1-shop.html" class="product-category">category</a>
-                                </div>
-                                <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish"><i
-                                        class="icon-heart"></i></a>
-                            </div>
-                            <h3 class="product-title"> <a href="demo1-product.html">Porto Extended Camera</a>
+                            <h3 class="product-title">
+                                <a href="{{ route('product.details', [$product->id, $product->product_slug]) }}">{{ $product->product_name }}</a>
                             </h3>
                             <div class="ratings-container">
                                 <div class="product-ratings">
-                                    <span class="ratings" style="width:100%"></span>
+                                    <span class="ratings" style="width:80%"></span>
                                     <!-- End .ratings -->
                                     <span class="tooltiptext tooltip-top"></span>
                                 </div>
                                 <!-- End .product-ratings -->
                             </div>
                             <!-- End .product-container -->
+                            
                             <div class="price-box">
-                                <span class="product-price">$9.00</span>
+                            @if($productVariation->discount_price == null)
+                                <span class="product-price">{{ $productVariation->selling_price }}</span>
+                            @else
+                                <del class="old-price">{{ $productVariation->selling_price }}</del>
+                                <span class="product-price">{{ $productVariation->discount_price }}</span>
+                            @endif
                             </div>
                             <!-- End .price-box -->
+                            <div class="product-action">
+                                <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i
+                                        class="icon-heart"></i></a>
+                                <a href="#" class="btn-icon btn-add-cart product-type-simple"><i
+                                        class="icon-shopping-cart"></i><span>ADD TO CART</span></a>
+                                <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
                         </div>
                         <!-- End .product-details -->
-                    </div>
+                    </div> {{-- end product default --}}
+                    @endforeach
+
                 </div>
+            
+
                 <!-- End .featured-proucts -->
+
+
+                {{-- quick view --}}
+                <div class="product-single-container product-single-default product-quick-view mb-0 custom-scrollbar">
+                    <div class="row">
+                        <div class="col-md-6 product-single-gallery mb-md-0">
+                            <div class="product-slider-container">
+                                <div class="label-group">
+                                    <div class="product-label label-hot">HOT</div>
+                                    <!---->
+                                    <div class="product-label label-sale">
+                                        -16%
+                                    </div>
+                                </div>
+                
+                                <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">
+                                    <div class="product-item">
+                                        <img class="product-single-image" src="assets/images/products/zoom/product-1-big.jpg"
+                                            data-zoom-image="assets/images/products/zoom/product-1-big.jpg" />
+                                    </div>
+                                    <div class="product-item">
+                                        <img class="product-single-image" src="assets/images/products/zoom/product-2-big.jpg"
+                                            data-zoom-image="assets/images/products/zoom/product-2-big.jpg" />
+                                    </div>
+                                    <div class="product-item">
+                                        <img class="product-single-image" src="assets/images/products/zoom/product-3-big.jpg"
+                                            data-zoom-image="assets/images/products/zoom/product-3-big.jpg" />
+                                    </div>
+                                    <div class="product-item">
+                                        <img class="product-single-image" src="assets/images/products/zoom/product-4-big.jpg"
+                                            data-zoom-image="assets/images/products/zoom/product-4-big.jpg" />
+                                    </div>
+                                    <div class="product-item">
+                                        <img class="product-single-image" src="assets/images/products/zoom/product-5-big.jpg"
+                                            data-zoom-image="assets/images/products/zoom/product-5-big.jpg" />
+                                    </div>
+                                </div>
+                                <!-- End .product-single-carousel -->
+                            </div>
+                            <div class="prod-thumbnail owl-dots">
+                                <div class="owl-dot">
+                                    <img src="assets/images/products/zoom/product-1.jpg" />
+                                </div>
+                                <div class="owl-dot">
+                                    <img src="assets/images/products/zoom/product-2.jpg" />
+                                </div>
+                                <div class="owl-dot">
+                                    <img src="assets/images/products/zoom/product-3.jpg" />
+                                </div>
+                                <div class="owl-dot">
+                                    <img src="assets/images/products/zoom/product-4.jpg" />
+                                </div>
+                                <div class="owl-dot">
+                                    <img src="assets/images/products/zoom/product-5.jpg" />
+                                </div>
+                            </div>
+                        </div><!-- End .product-single-gallery -->
+                
+                        <div class="col-md-6">
+                            <div class="product-single-details mb-0 ml-md-4">
+                                <h1 class="product-title">Men Black Sports Shoes</h1>
+                
+                                <div class="ratings-container">
+                                    <div class="product-ratings">
+                                        <span class="ratings" style="width:60%"></span><!-- End .ratings -->
+                                    </div><!-- End .product-ratings -->
+                
+                                    <a href="#" class="rating-link">( 6 Reviews )</a>
+                                </div><!-- End .ratings-container -->
+                
+                                <hr class="short-divider">
+                
+                                <div class="price-box">
+                                    <span class="product-price"> $1,699.00</span>
+                                </div><!-- End .price-box -->
+                
+                                <div class="product-desc">
+                                    <p>
+                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                        pariatur. Excepteur sint occaecat cupidatat non.
+                                    </p>
+                                </div><!-- End .product-desc -->
+                
+                                <ul class="single-info-list">
+                                    <!---->
+                                    <li>
+                                        SKU:
+                                        <strong>654613612</strong>
+                                    </li>
+                
+                                    <li>
+                                        CATEGORY:
+                                        <strong>
+                                            <a href="#" class="product-category">SHOES</a>
+                                        </strong>
+                                    </li>
+                                </ul>
+                
+                                <div class="product-filters-container">
+                                    <div class="product-single-filter">
+                                        <label>Size:</label>
+                                        <ul class="config-size-list">
+                                            <li><a href="javascript:;" class="d-flex align-items-center justify-content-center">XL</a>
+                                            </li>
+                                            <li class=""><a href="javascript:;"
+                                                    class="d-flex align-items-center justify-content-center">L</a></li>
+                                            <li class=""><a href="javascript:;"
+                                                    class="d-flex align-items-center justify-content-center">M</a></li>
+                                            <li class=""><a href="javascript:;"
+                                                    class="d-flex align-items-center justify-content-center">S</a></li>
+                                        </ul>
+                                    </div>
+                
+                                    <div class="product-single-filter">
+                                        <label></label>
+                                        <a class="font1 text-uppercase clear-btn" href="#">Clear</a>
+                                    </div>
+                                    <!---->
+                                </div>
+                
+                                <div class="product-action">
+                                    <div class="price-box product-filtered-price">
+                                        <del class="old-price"><span>$286.00</span></del>
+                                        <span class="product-price">$245.00</span>
+                                    </div>
+                
+                                    <div class="product-single-qty">
+                                        <input class="horizontal-quantity form-control" type="text" />
+                                    </div><!-- End .product-single-qty -->
+                
+                                    <a href="javascript:;" class="btn btn-dark add-cart mr-2" title="Add to Cart">Add to Cart</a>
+                
+                                    <a href="cart.html" class="btn view-cart d-none">View cart</a>
+                                </div><!-- End .product-action -->
+                
+                                <hr class="divider mb-0 mt-0">
+                
+                                <div class="product-single-share mb-0">
+                                    <label class="sr-only">Share:</label>
+                
+                                    <div class="social-icons mr-2">
+                                        <a href="#" class="social-icon social-facebook icon-facebook" target="_blank"
+                                            title="Facebook"></a>
+                                        <a href="#" class="social-icon social-twitter icon-twitter" target="_blank" title="Twitter"></a>
+                                        <a href="#" class="social-icon social-linkedin fab fa-linkedin-in" target="_blank"
+                                            title="Linkedin"></a>
+                                        <a href="#" class="social-icon social-gplus fab fa-google-plus-g" target="_blank"
+                                            title="Google +"></a>
+                                        <a href="#" class="social-icon social-mail icon-mail-alt" target="_blank" title="Mail"></a>
+                                    </div><!-- End .social-icons -->
+                
+                                    <a href="wishlist.html" class="btn-icon-wish add-wishlist" title="Add to Wishlist"><i
+                                            class="icon-wishlist-2"></i><span>Add to
+                                            Wishlist</span></a>
+                                </div><!-- End .product single-share -->
+                            </div>
+                        </div><!-- End .product-single-details -->
+                
+                        <button title="Close (Esc)" type="button" class="mfp-close">
+                            ×
+                        </button>
+                    </div><!-- End .row -->
+                </div><!-- End .product-single-container -->
+                {{-- end quick view  --}}
+
 
                 <div class="brands-slider owl-carousel owl-theme images-center appear-animate" data-animation-name="fadeIn" data-animation-duration="700" data-owl-options="{
                     'margin': 0,
@@ -704,8 +741,8 @@
 
                     <nav class="side-nav">
                         <ul class="menu menu-vertical sf-arrows">
-                            <li class="active"><a href="demo1.html"><i class="icon-home"></i>Home</a></li>
-                            <li>
+                            <li class="active"><a href="/"><i class="icon-home"></i>Home</a></li>
+                            {{-- <li>
                                 <a href="demo1-shop.html" class="sf-with-ul"><i
                                         class="sicon-badge"></i>Categories</a>
                                 <div class="megamenu megamenu-fixed-width megamenu-3cols">
@@ -766,97 +803,37 @@
                                     </div>
                                 </div>
                                 <!-- End .megamenu -->
-                            </li>
-                            <li>
-                                <a href="demo1-product.html" class="sf-with-ul"><i
-                                        class="sicon-basket"></i>Products</a>
-                                <div class="megamenu megamenu-fixed-width">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <a href="#" class="nolink pl-0">PRODUCT PAGES</a>
-                                            <ul class="submenu">
-                                                <li><a href="product.html">SIMPLE PRODUCT</a></li>
-                                                <li><a href="product-variable.html">VARIABLE PRODUCT</a></li>
-                                                <li><a href="product.html">SALE PRODUCT</a></li>
-                                                <li><a href="product.html">FEATURED & ON SALE</a></li>
-                                                <li><a href="product-custom-tab.html">WITH CUSTOM TAB</a></li>
-                                                <li><a href="product-sidebar-left.html">WITH LEFT SIDEBAR</a>
-                                                </li>
-                                                <li><a href="product-sidebar-right.html">WITH RIGHT SIDEBAR</a>
-                                                </li>
-                                                <li><a href="product-addcart-sticky.html">ADD CART STICKY</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <!-- End .col-lg-4 -->
+                            </li> --}}
 
-                                        <div class="col-lg-4">
-                                            <a href="#" class="nolink pl-0">PRODUCT LAYOUTS</a>
-                                            <ul class="submenu">
-                                                <li><a href="product-extended-layout.html">EXTENDED LAYOUT</a>
-                                                </li>
-                                                <li><a href="product-grid-layout.html">GRID IMAGE</a></li>
-                                                <li><a href="product-full-width.html">FULL WIDTH LAYOUT</a></li>
-                                                <li><a href="product-sticky-info.html">STICKY INFO</a></li>
-                                                <li><a href="product-sticky-both.html">LEFT & RIGHT STICKY</a>
-                                                </li>
-                                                <li><a href="product-transparent-image.html">TRANSPARENT
-                                                        IMAGE</a></li>
-                                                <li><a href="product-center-vertical.html">CENTER VERTICAL</a>
-                                                </li>
-                                                <li><a href="#">BUILD YOUR OWN</a></li>
-                                            </ul>
-                                        </div>
-                                        <!-- End .col-lg-4 -->
+                @foreach ($categories as $category)
+                    @php
+                    $subCategories = App\Models\SubCategory::where('category_id', $category->id)->orderBy('subcategory_name','ASC')->get();
+                    @endphp
+                        <li>
+                            <a href="#" class="sf-with-ul"><i class="{{ $category->category_icon }}"></i>{{ $category->category_name }}</a>
+                        @if (!empty($subCategories))
+                            <ul>
+                            @foreach ($subCategories as $subCategory)
+                                @php
+                                $subSubCategories = App\Models\SuBSubCategory::where('subcategory_id', $subCategory->id)->orderBy('subsubcategory_name','ASC')->get();
+                                @endphp
+                                <li><a href="#">{{ $subCategory->subcategory_name }}</a>
+                                    <ul>
 
-                                        <div class="col-lg-4 p-0">
-                                            <div class="menu-banner menu-banner-2">
-                                                <figure>
-                                                    <img src="{{ asset('frontend/assets/images/menu-banner-1.jpg') }}" alt="Menu banner" class="product-promo">
-                                                </figure>
-                                                <i>OFF</i>
-                                                <div class="banner-content">
-                                                    <h4>
-                                                        <span class="">UP TO</span><br />
-                                                        <b class="">50%</b>
-                                                    </h4>
-                                                </div>
-                                                <a href="demo1-shop.html" class="btn btn-sm btn-dark">SHOP
-                                                    NOW</a>
-                                            </div>
-                                        </div>
-                                        <!-- End .col-lg-4 -->
-                                    </div>
-                                    <!-- End .row -->
-                                </div>
-                                <!-- End .megamenu -->
-                            </li>
-                            <li>
-                                <a href="#" class="sf-with-ul"><i class="sicon-envelope"></i>Pages</a>
+                                    @foreach ($subSubCategories as $subSubCategory)
+                                        <li><a href="blog.html">{{ $subSubCategory->subsubcategory_name }}</a></li>
+                                    @endforeach
+                                    </ul>
+                                </li>
+                            @endforeach
+                            </ul>
+                        @endif
+                            
+                            
+                        </li>
 
-                                <ul>
-                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                    <li><a href="cart.html">Shopping Cart</a></li>
-                                    <li><a href="checkout.html">Checkout</a></li>
-                                    <li><a href="dashboard.html">Dashboard</a></li>
-                                    <li><a href="demo1-about.html">About Us</a></li>
-                                    <li><a href="#">Blog</a>
-                                        <ul>
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="single.html">Blog Post</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="demo1-contact.html">Contact Us</a></li>
-                                    <li><a href="login.html">Login</a></li>
-                                    <li><a href="forgot-password.html">Forgot Password</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="blog.html"><i class="sicon-book-open"></i>Blog</a></li>
-                            <li><a href="demo1-about.html"><i class="sicon-users"></i>About Us</a></li>
-                            <li><a href="#"><i class="icon-cat-gift"></i>Special Offer!</a></li>
-                            <li><a href="https://1.envato.market/DdLk5" target="_blank"><i
-                                        class="sicon-star"></i>Buy Porto!<span
-                                        class="tip tip-hot">Hot</span></a></li>
+                @endforeach
+
                         </ul>
                     </nav>
                 </div>

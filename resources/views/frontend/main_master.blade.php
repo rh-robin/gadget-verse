@@ -5,13 +5,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title')</title>
 
-    <title>Porto - Bootstrap eCommerce Template</title>
-
-    <meta name="keywords" content="HTML5 Template" />
+    {{-- <meta name="keywords" content="HTML5 Template" />
     <meta name="description" content="Porto - Bootstrap eCommerce Template">
-    <meta name="author" content="SW-THEMES">
+    <meta name="author" content="SW-THEMES"> --}}
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('frontend/assets/images/icons/favicon.png') }}">
 
@@ -80,7 +82,138 @@
         @yield('content')
         <!-- End .main -->
 
-        
+
+  <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" >
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="product-single-container product-single-default product-quick-view mb-0">
+                <div class="row">
+                    <div class="col-md-6 product-single-gallery mb-md-0">
+                        <div class="product-slider-container">
+            
+                            <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">
+                                <div class="product-item">
+                                    <img id="thumbnail" class="product-single-image" src=""/>
+                                </div>
+                            </div>
+                            <!-- End .product-single-carousel -->
+                        </div>
+                        {{-- <div class="prod-thumbnail owl-dots">
+                            <div class="owl-dot">
+                                <img src="assets/images/products/zoom/product-1.jpg" />
+                            </div>
+                        </div> --}}
+                    </div><!-- End .product-single-gallery -->
+            
+                    <div class="col-md-6">
+                        <div class="product-single-details mb-0 ml-md-4">
+                            <h1 class="product-title" id="productName"></h1>
+            
+                            <div class="ratings-container">
+                                <div class="product-ratings">
+                                    <span class="ratings" style="width:60%"></span><!-- End .ratings -->
+                                </div><!-- End .product-ratings -->
+            
+                                <a href="#" class="rating-link">( 6 Reviews )</a>
+                            </div><!-- End .ratings-container -->
+            
+                            <hr class="short-divider">
+            
+                            <div class="price-box" id="priceRange">
+                                <span class="product-price"></span>
+                            </div><!-- End .price-box -->
+            
+                            <div class="product-desc">
+                                <p id="shortDesc">
+                                    
+                                </p>
+                            </div><!-- End .product-desc -->
+            
+                            <ul class="single-info-list">
+                                <!---->
+                                <li>
+                                    SKU:
+                                    <strong id="sku"></strong>
+                                </li>
+            
+                                <li>
+                                    CATEGORY:
+                                    <strong>
+                                        <a href="#" class="product-category" id="category"></a>
+                                    </strong>
+                                </li>
+                            </ul>
+            
+                            <div class="product-filters-container">
+                                <div class="filter_color d-flex" >
+                                    <h4 class="pr-2" style="margin-bottom:0; font-size:16px;">Colors: </h4>
+                                    <div class="d-flex flex-wrap" id="colorContainer"></div>
+                                </div>
+                                <div class="filter_color d-flex">
+                                    <h4 class="pr-2" style="margin-bottom:0; font-size:16px;">Sizes: </h4>
+                                    
+                                    <div class="d-flex flex-wrap" id="sizeContainer"></div>
+                                    
+            
+                                   
+                                    
+                                </div>
+                                <div class=" d-none" id="clearButtonContainer">
+                                    <label></label>
+                                    <a class="font1 text-uppercase clear-btn" href="#" onclick="clearSelections(event)">Clear</a>
+                                </div>
+                            </div>
+            
+                            <div class="product-action">
+                                <div class="price-box product-filtered-price d-none" id="priceBox">
+                                    
+                                </div>
+            
+                                <div class="product-single-qty">
+                                    <input class="horizontal-quantity form-control" type="text" />
+                                </div><!-- End .product-single-qty -->
+            
+                                <a href="javascript:;" class="btn btn-dark add-cart mr-2" title="Add to Cart">Add to Cart</a>
+            
+                                <a href="cart.html" class="btn view-cart d-none">View cart</a>
+                            </div><!-- End .product-action -->
+            
+                            <hr class="divider mb-0 mt-0">
+            
+                            <div class="product-single-share mb-0">
+                                <label class="sr-only">Share:</label>
+            
+                                <div class="social-icons mr-2">
+                                    <a href="#" class="social-icon social-facebook icon-facebook" target="_blank"
+                                        title="Facebook"></a>
+                                    <a href="#" class="social-icon social-twitter icon-twitter" target="_blank" title="Twitter"></a>
+                                    <a href="#" class="social-icon social-linkedin fab fa-linkedin-in" target="_blank"
+                                        title="Linkedin"></a>
+                                    <a href="#" class="social-icon social-gplus fab fa-google-plus-g" target="_blank"
+                                        title="Google +"></a>
+                                    <a href="#" class="social-icon social-mail icon-mail-alt" target="_blank" title="Mail"></a>
+                                </div><!-- End .social-icons -->
+            
+                                <a href="wishlist.html" class="btn-icon-wish add-wishlist" title="Add to Wishlist"><i
+                                        class="icon-wishlist-2"></i><span>Add to
+                                        Wishlist</span></a>
+                            </div><!-- End .product single-share -->
+                        </div>
+                    </div><!-- End .product-single-details -->
+            
+                    <button title="Close (Esc)" type="button" class="mfp-close close"   data-dismiss="modal" aria-label="Close">
+                        ×
+                    </button>
+                </div><!-- End .row -->
+            </div> {{-- end product-single-container --}}
+        </div>
+        </div>
+    </div>
+  {{-- ===================================================================
+    =========================================================
+    ==================================================== --}}
+   
 
         @include('frontend.body.footer')
         <!-- End .footer -->
@@ -255,6 +388,11 @@
 
     <a id="scroll-top" href="#top" title="Top" role="button"><i class="icon-angle-up"></i></a>
 
+
+    
+
+
+
     <!-- Plugins JS File -->
     <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/plugins.min.js') }}"></script>
@@ -265,6 +403,190 @@
 
     <!-- Main JS File -->
     <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
+
+    {{-- scripts to load product quick view data --}}
+    <script>
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+
+        function productQuickView(id){
+            let thumbnail =  document.getElementById('thumbnail');
+            let productName =  document.getElementById('productName');
+            let priceRange =  document.getElementById('priceRange');
+            let shortDesc =  document.getElementById('shortDesc');
+            let sku =  document.getElementById('sku');
+            let category =  document.getElementById('category');
+            let colorContainer =  document.getElementById('colorContainer');
+            let sizeContainer =  document.getElementById('sizeContainer');
+            var clearButtonContainer = document.getElementById('clearButtonContainer');
+            clearButtonContainer.classList.add('d-none');
+            var priceBox = document.getElementById('priceBox');
+            priceBox.innerHTML = ``;
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('/product/quickview') }}/" + id,
+                success: function(response) {
+                    thumbnail.src = "{{ asset('') }}"
+                    thumbnail.src += response.product.product_thumbnail;
+                    productName.innerText = response.product.product_name;
+                    let lowestPrice = response.lowestPrice;
+                    let highestPrice = response.highestPrice;
+                    if (lowestPrice == highestPrice || highestPrice==0){
+                        priceRange.innerHTML = `
+                            <span class="product-price">${lowestPrice}tk</span>
+                        `;
+                    }else{
+                        priceRange.innerHTML = `
+                        <span class="product-price">${lowestPrice}tk &ndash;</span>
+                        <span class="product-price"> ${highestPrice}tk</span>
+                        `;
+                    }
+                    shortDesc.innerText = response.product.short_desc;
+                    sku.innerText = response.product.product_sku;
+                    category.innerText = response.category;
+                    let colors = response.colors;
+                    colorContainer.innerHTML=``;
+                    colors.forEach(color => {
+                        let colordiv = `
+                            <div class="d-flex pr-3" >
+                                <div class="pr-2">
+                                    <input type="checkbox" id="color_${color['color_name']}" name="color" onclick="checkboxColor(this,${id})" value="${color['color_name']}">
+                                    <label class="text-capitalize" for="color_${color['color_name']}" style="font-weight: 400; font-size:16px;">${color['color_name']}</label>
+                                </div>
+                                <div class="" style="width: 20px; height:20px; background-color:${color['color_code'] ? color['color_code'] : color['color_name']}"></div>
+                            </div>
+                        `;
+                        colorContainer.innerHTML += colordiv;
+                    });
+                    let sizes = response.sizes;
+                    sizeContainer.innerHTML = ``;
+                    sizes.forEach(size => {
+                        let sizediv = `
+                            <div class="pr-5" >
+                                <div class="">
+                                    <input type="checkbox" id="size_${size}" name="size" onclick="checkboxSize(this,${id})" value="${size}">
+                                    <label class="text-capitalize" for="size_${size}" style="font-weight: 400; font-size:16px;">${size}</label>
+                                </div>
+                            </div>
+                        `;
+                        sizeContainer.innerHTML += sizediv;
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(error); // Handle any errors
+                }
+            });
+        }
+
+    
+        
+        function checkboxColor(clickedCheckbox, id) {
+            // Get the ID of the clicked checkbox
+            var clickedCheckboxId = clickedCheckbox.id;
+            
+            // Uncheck all checkboxes with name 'color' except the clicked one
+            var checkboxes = document.getElementsByName('color');
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.id !== clickedCheckboxId) {
+                    checkbox.checked = false;
+                }
+            });
+            checkSelections(id);
+        }
+
+        function checkboxSize(clickedCheckbox, id) {
+            // Get the ID of the clicked checkbox
+            var clickedCheckboxId = clickedCheckbox.id;
+            console.log(clickedCheckboxId);
+            // Uncheck all checkboxes with name 'size' except the clicked one
+            var checkboxes = document.getElementsByName('size');
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.id !== clickedCheckboxId) {
+                    checkbox.checked = false;
+                }
+            });
+            checkSelections(id);
+        }
+
+        function checkSelections(id) {
+            var colorCheckboxes = document.getElementsByName('color');
+            var sizeCheckboxes = document.getElementsByName('size');
+            
+            var productId = id;
+
+            var selectedColor = "";
+            var selectedSize = "";
+
+            colorCheckboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    selectedColor = checkbox.value;
+                }
+            });
+
+            sizeCheckboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    selectedSize = checkbox.value;
+                }
+            });
+
+            if (selectedColor !== "" && selectedSize !== "") {
+                clearButtonContainer.classList.remove('d-none');
+                priceBox.classList.remove('d-none');
+                priceBox.classList.add('d-block');
+                var productId = id;
+                // Make AJAX request to fetch variation data
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ url('/fetch-varaition') }}/" + productId+"/"+selectedSize+"/"+selectedColor,
+                    success: function(response) {
+                        console.log(response);
+                        var sellingPrice = response.selling_price;
+                        var discountPrice = response.discount_price;
+                        if(discountPrice==null){
+                            priceBox.innerHTML = `
+                                <span class="product-price">${sellingPrice}tk</span>
+                            `;
+                        }else{
+                            priceBox.innerHTML = `
+                                <del class="old-price"><span>${sellingPrice}tk</span></del>
+                                <span class="product-price">${discountPrice}tk</span>
+                            `;
+                        }
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error); // Handle any errors
+                    }
+                });
+            } else {
+                clearButtonContainer.classList.add('d-none');
+            }
+        }
+
+        function clearSelections(event) {
+            event.preventDefault();
+            var colorCheckboxes = document.getElementsByName('color');
+            var sizeCheckboxes = document.getElementsByName('size');
+            var clearButtonContainer = document.getElementById('clearButtonContainer');
+
+            colorCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+
+            sizeCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+
+            clearButtonContainer.classList.add('d-none');
+            priceBox.classList.add('d-none');
+            priceBox.classList.remove('d-block');
+        }
+    </script>
+
+
 
 
     {{-- scripts for toastr --}}

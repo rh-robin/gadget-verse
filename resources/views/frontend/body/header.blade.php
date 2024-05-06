@@ -1,8 +1,14 @@
 <header class="header home">
+
+@php
+$categories = App\Models\Category::orderBy('category_name','ASC')->where('status',1)->get();
+
+@endphp
+
     <div class="header-top bg-primary text-uppercase">
         <div class="container">
             <div class="header-left">
-                <div class="header-dropdown mr-auto mr-sm-3 mr-md-0">
+                {{-- <div class="header-dropdown mr-auto mr-sm-3 mr-md-0">
                     <a href="#" class="pl-0"><i class="flag-us flag"></i>ENG</a>
                     <div class="header-menu">
                         <ul>
@@ -12,10 +18,10 @@
                         </ul>
                     </div>
                     <!-- End .header-menu -->
-                </div>
+                </div> --}}
                 <!-- End .header-dropown -->
 
-                <div class="header-dropdown ml-3 pl-1">
+                {{-- <div class="header-dropdown ml-3 pl-1">
                     <a href="#">USD</a>
                     <div class="header-menu">
                         <ul>
@@ -24,13 +30,13 @@
                         </ul>
                     </div>
                     <!-- End .header-menu -->
-                </div>
+                </div> --}}
                 <!-- End .header-dropown -->
             </div>
             <!-- End .header-left -->
 
             <div class="header-right header-dropdowns ml-0 ml-sm-auto">
-                <p class="top-message mb-0 d-none d-sm-block">Welcome To Porto!</p>
+                <p class="top-message mb-0 d-none d-sm-block">Welcome To Gadget Verse!</p>
                 <div class="header-dropdown dropdown-expanded mr-3">
                     <a href="#">Links</a>
                     <div class="header-menu">
@@ -84,22 +90,21 @@
                             <div class="select-custom">
                                 <select id="cat" name="cat">
                                     <option value="">All Categories</option>
-                                    <option value="4">Fashion</option>
-                                    <option value="12">- Women</option>
-                                    <option value="13">- Men</option>
-                                    <option value="66">- Jewellery</option>
-                                    <option value="67">- Kids Fashion</option>
-                                    <option value="5">Electronics</option>
-                                    <option value="21">- Smart TVs</option>
-                                    <option value="22">- Cameras</option>
-                                    <option value="63">- Games</option>
-                                    <option value="7">Home &amp; Garden</option>
-                                    <option value="11">Motors</option>
-                                    <option value="31">- Cars and Trucks</option>
-                                    <option value="32">- Motorcycles &amp; Powersports</option>
-                                    <option value="33">- Parts &amp; Accessories</option>
-                                    <option value="34">- Boats</option>
-                                    <option value="57">- Auto Tools &amp; Supplies</option>
+
+
+                            @foreach ($categories as $category)
+                                @php
+                                $subCategories = App\Models\SubCategory::where('category_id', $category->id)->orderBy('subcategory_name','ASC')->get();
+                                @endphp
+
+                                <option value="4">{{ $category->category_name }}</option>
+                                @foreach ($subCategories as $subCategory)
+                                    <option value="4">- {{ $subCategory->subcategory_name }}</option>
+                                @endforeach
+                            @endforeach
+                                    
+
+
                                 </select>
                             </div>
                             <!-- End .select-custom -->
@@ -235,47 +240,36 @@
             <nav class="main-nav w-100">
                 <ul class="menu">
                     <li>
-                        <a href="demo4.html">Home</a>
+                        <a href="/">Home</a>
                     </li>
+
+                @foreach ($categories as $category)
+                    @php
+                    $subCategories = App\Models\SubCategory::where('category_id', $category->id)->orderBy('subcategory_name','ASC')->get();
+                    @endphp
+
                     <li>
-                        <a href="category.html">Categories</a>
+                        <a href="category.html">{{ $category->category_name }}</a>
                         <div class="megamenu megamenu-fixed-width megamenu-3cols">
                             <div class="row">
-                                <div class="col-lg-4">
-                                    <a href="#" class="nolink">VARIATION 1</a>
+                            @foreach ($subCategories as $subCategory)
+                                @php
+                                $subSubCategories = App\Models\SuBSubCategory::where('subcategory_id', $subCategory->id)->orderBy('subsubcategory_name','ASC')->get();
+                                @endphp
+                                <div class="col">
+                                    <a href="#" class="nolink">{{ $subCategory->subcategory_name }}</a>
                                     <ul class="submenu">
-                                        <li><a href="category.html">Fullwidth Banner</a></li>
-                                        <li><a href="category-banner-boxed-slider.html">Boxed Slider Banner</a>
-                                        </li>
-                                        <li><a href="category-banner-boxed-image.html">Boxed Image Banner</a>
-                                        </li>
-                                        <li><a href="category.html">Left Sidebar</a></li>
-                                        <li><a href="category-sidebar-right.html">Right Sidebar</a></li>
-                                        <li><a href="category-off-canvas.html">Off Canvas Filter</a></li>
-                                        <li><a href="category-horizontal-filter1.html">Horizontal Filter1</a>
-                                        </li>
-                                        <li><a href="category-horizontal-filter2.html">Horizontal Filter2</a>
-                                        </li>
+                                        @foreach ($subSubCategories as $subSubCategory)
+                                        <li><a href="category.html">{{ $subSubCategory->subsubcategory_name }}</a></li>
+                                        @endforeach
+                                        
                                     </ul>
                                 </div>
-                                <div class="col-lg-4">
-                                    <a href="#" class="nolink">VARIATION 2</a>
-                                    <ul class="submenu">
-                                        <li><a href="category-list.html">List Types</a></li>
-                                        <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll</a>
-                                        </li>
-                                        <li><a href="category.html">3 Columns Products</a></li>
-                                        <li><a href="category-4col.html">4 Columns Products</a></li>
-                                        <li><a href="category-5col.html">5 Columns Products</a></li>
-                                        <li><a href="category-6col.html">6 Columns Products</a></li>
-                                        <li><a href="category-7col.html">7 Columns Products</a></li>
-                                        <li><a href="category-8col.html">8 Columns Products</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-4 p-0">
+                            @endforeach
+                                {{-- <div class="col p-0">
                                     <div class="menu-banner">
                                         <figure>
-                                            <img src="assets/images/menu-banner.jpg" width="192" height="313"
+                                            <img src="{{ asset('assets/images/menu-banner.jpg') }}" width="192" height="313"
                                                 alt="Menu banner">
                                         </figure>
                                         <div class="banner-content">
@@ -287,10 +281,12 @@
                                             <a href="category.html" class="btn btn-sm btn-dark">SHOP NOW</a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div><!-- End .megamenu -->
                     </li>
+                @endforeach
+
                     <li>
                         <a href="product.html">Products</a>
                         <div class="megamenu megamenu-fixed-width">
@@ -361,7 +357,6 @@
                             <li><a href="forgot-password.html">Forgot Password</a></li>
                         </ul>
                     </li>
-                    <li><a href="blog.html">Blog</a></li>
                     <li>
                         <a href="#">Elements</a>
                         <ul class="custom-scrollbar">
@@ -384,8 +379,7 @@
                         </ul>
                     </li>
                     <li><a href="contact.html">Contact Us</a></li>
-                    <li class="float-right"><a href="https://1.envato.market/DdLk5" class="pl-5"
-                            target="_blank">Buy Porto!</a></li>
+                    <li class="float-right"><a href="https://1.envato.market/DdLk5" class="pl-5" target="_blank">Buy Porto!</a></li>
                     <li class="float-right"><a href="#" class="pl-5">Special Offer!</a></li>
                 </ul>
             </nav>

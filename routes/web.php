@@ -177,7 +177,11 @@ Route::get('/language/english',[LanguageController::class,'english'])->name('lan
 Route::get('/language/bangla',[LanguageController::class,'bangla'])->name('language.bangla');
 
 // Frontend Product Details Page url 
-Route::get('/product/details/{id}/{slug}', [IndexController::class, 'ProductDetails']);
+Route::get('/product/details/{id}/{slug}', [IndexController::class, 'productDetails'])->name('product.details');
+Route::get('/fetch-varaition/{id}/{size}/{color}', [IndexController::class, 'fetchVariation']);
+Route::get('/product/quickview/{id}', [IndexController::class, 'productQuickview']);
+
+
 
 
 

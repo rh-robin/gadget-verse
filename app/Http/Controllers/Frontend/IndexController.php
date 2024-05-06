@@ -9,17 +9,109 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Slider;
 use App\Models\Product;
+use App\Models\ProductVariation;
 use Illuminate\Support\Facades\Hash;
 
 class IndexController extends Controller
 {
     public function index(){
-        $categories = Category::orderBy('category_name','ASC')->get();
+        $categories = Category::orderBy('category_name','ASC')->where('status',1)->get();
         $sliders = Slider::where('status',1)->orderBy('id','DESC')->limit(3)->get();
-        $products = Product::where('status',1)->orderBy('id','DESC')->limit(6)->get();
+        $products = Product::where('status',1)->orderBy('id','DESC')->get();
         return view("frontend.index",compact('categories','sliders','products'));
     }
 
+    public function productDetails($id, $slug){
+        $product = Product::findOrFail($id);
+        return view("frontend.product.product_details",compact('product'));
+    }
+
+    public function fetchVariation($id, $size, $color){
+        
+        
+        // Fetch variation data from the database
+        $variation = ProductVariation::with('images')->where('product_id',$id)->where('size',$size)->where('color_name',$color)->first(); 
+
+        return response()->json($variation);
+    }
+
+
+    public function productQuickview($id){
+        $product = Product::findOrFail($id);
+        $category = $product->category->category_name;
+        $variations = $product->variations;
+        $sizes = [];
+        $colors = [];
+        foreach ($variations as $variation) {
+            // Check if the size exists in the $colors array
+            $sizeExists = false;
+            foreach ($sizes as $size) {
+                if ($size === $variation->size) {
+                    $sizeExists = true;
+                    break;
+                }
+            }
+            // If the color is not found, add it to the $colors array
+            if (!$sizeExists) {
+                $sizes[] = $variation->size;
+            }
+
+            // Check if the color exists in the $colors array
+            $colorExists = false;
+            foreach ($colors as $color) {
+                if ($color['color_name'] === $variation->color_name && $color['color_code'] === $variation->color_code) {
+                    $colorExists = true;
+                    break;
+                }
+            }
+            // If the color is not found, add it to the $colors array
+            if (!$colorExists) {
+                $colors[] = [
+                    'color_name' => $variation->color_name,
+                    'color_code' => $variation->color_code
+                ];
+            }
+        }
+        $lowestSellingPrice = $product->variations()->min('selling_price');
+        $highestSellingPrice = $product->variations()->max('selling_price');
+        $lowestDiscountPrice = $product->variations()->min('discount_price');
+        $highestDiscountPrice = $product->variations()->max('discount_price');
+
+        $lowestPrice = 0;
+        $highestPrice = 0;
+        if ($lowestDiscountPrice>0) {
+            $lowestPrice = $lowestDiscountPrice;
+        }else{
+            $lowestPrice = $lowestSellingPrice;
+        }
+        if ($highestDiscountPrice>0) {
+            $highestPrice = $highestDiscountPrice;
+        }
+        return response()->json(array(
+            'product' => $product,
+            'sizes' => $sizes,
+            'colors' => $colors,
+            'lowestPrice' => $lowestPrice,
+            'highestPrice' => $highestPrice,
+            'category' => $category,
+        ));
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* ================== user related function ============ =========================================*/
     public function userLogout(){
         Auth::logout();
         return redirect()->route('login');
