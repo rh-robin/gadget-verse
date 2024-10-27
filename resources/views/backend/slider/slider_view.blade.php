@@ -8,7 +8,7 @@
 <div class="content-header">
     <div class="d-flex align-items-center">
         <div class="mr-auto">
-            <h3 class="page-title">Brand</h3>
+            <h3 class="page-title">Slider</h3>
             <div class="d-inline-block align-items-center">
                 <nav>
                     <ol class="breadcrumb">
@@ -36,34 +36,19 @@
                      <table id="example1" class="table table-bordered table-striped">
                        <thead>
                            <tr>
-                               <th style="padding: 5px">Title English</th>
-                               <th style="padding: 5px">Description English</th>
-                               <th style="padding: 5px">Slider Image</th>
-                               <th style="padding: 5px">Status</th>
+                               <th style="padding: 5px">#</th>
+                               <th style="padding: 5px">Slider Name</th>
                                <th width="30%" style="padding: 5px">Action</th>
                            </tr>
                        </thead>
                        <tbody>
-                        @forelse ($sliders as $slider)
+                        @forelse ($sliders as $index => $slider)
                         <tr>
-                            <td style="padding: 5px">{{ $slider->title_en }}</td>
-                            <td style="padding: 5px">{{ $slider->description_en }}</td>
-                            <td style="padding: 5px"><img src="{{ asset($slider->slider_image) }}" alt=""></td>
-                            <td style="padding: 5px">
-                                @if($slider->status == 1)
-                                <span class="badge badge-pill badge-success"> Active </span>
-                                @else
-                                <span class="badge badge-pill badge-danger"> InActive </span>
-                                @endif
-                            </td>
+                            <td style="padding: 5px">{{ $index+1 }}</td>
+                            <td style="padding: 5px">{{ $slider->slider_name }}</td>
                             <td width="30%" style="padding: 5px" class="text-center">
                              <a href="{{ route('slider.edit',$slider->id) }}" class="btn btn-sm mx-1 btn-info" title="Edit Data"><i class="fa fa-pencil "></i></a>
                              <a href="{{ route('slider.delete',$slider->id) }}" id="delete" class="btn btn-sm mx-1 btn-danger" title="Delete Data"><i class="fa fa-trash "></i></a>
-                             @if($slider->status == 1)
-                             <a href="{{ route('slider.inactive',$slider->id) }}" class="btn btn-sm mx-1 btn-danger" title="Inactive Now"><i class="fa fa-arrow-down"></i> </a>
-                                @else
-                             <a href="{{ route('slider.active',$slider->id) }}" class="btn btn-sm mx-1 btn-success" title="Active Now"><i class="fa fa-arrow-up"></i> </a>
-                             @endif
                             </td>
                         </tr>
                         @empty
@@ -90,45 +75,14 @@
                    <form method="POST" action="{{ route('slider.store') }}" enctype="multipart/form-data">
                     @csrf
                         <div class="form-group">
-                            <h5>Title English <span class="text-danger"></span></h5>
+                            <h5>Slider Name <span class="text-danger"></span></h5>
                             <div class="controls">
-                                <input type="text" name="title_en" value="{{ old('title_en') }}" class="form-control"> <div class="help-block"></div></div>
-                            @error('title_en')
+                                <input type="text" name="slider_name" value="{{ old('slider_name') }}" class="form-control"> <div class="help-block"></div></div>
+                            @error('slider_name')
                             <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
                             @enderror
                         </div>
-                        <div class="form-group">
-                            <h5>Title Bangla <span class="text-danger"></span></h5>
-                            <div class="controls">
-                                <input type="text" name="title_bn" value="{{ old('title_bn') }}" class="form-control"> <div class="help-block"></div></div>
-                            @error('title_bn')
-                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <h5>Description English <span class="text-danger"></span></h5>
-                            <div class="controls">
-                                <input type="text" name="description_en" value="{{ old('description_en') }}" class="form-control"> <div class="help-block"></div></div>
-                            @error('description_en')
-                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <h5>Description Bangla <span class="text-danger"></span></h5>
-                            <div class="controls">
-                                <input type="text" name="description_bn" value="{{ old('description_bn') }}" class="form-control"> <div class="help-block"></div></div>
-                            @error('description_bn')
-                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <h5>Slider Image <span class="text-danger">*</span></h5>
-                            <div class="controls">
-                                <input type="file" name="slider_image" class="form-control"> <div class="help-block"></div></div>
-                            @error('slider_image')
-                            <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
-                            @enderror
-                        </div>
+                        
                         <div class="form-group">
                             <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Add New">
                         </div>

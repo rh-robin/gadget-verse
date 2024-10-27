@@ -31,7 +31,7 @@
 						<form method="POST" action="{{ isset($guard) ? url($guard.'/login') : route('login') }}">
 							@csrf
 							<label for="email">
-								Username or email address
+								Email address
 								<span class="required">*</span>
 							</label>
 							<input type="email" name="email" class="form-input form-wide" id="email" />
@@ -49,7 +49,7 @@
 
 							<div class="form-footer">
 								<div class="custom-control custom-checkbox mb-0">
-									<input type="checkbox" class="custom-control-input" id="lost-password" />
+									<input type="checkbox" class="custom-control-input" id="lost-password" name="remember" />
 									<label class="custom-control-label mb-0" for="lost-password">Remember
 										me</label>
 								</div>
@@ -68,19 +68,64 @@
 							<h2 class="title">Register</h2>
 						</div>
 
-						<form action="#">
-							<label for="register-email">
+						<form method="POST" action="{{ route('register') }}">
+						@csrf
+							<label for="name">
+								Name
+								<span class="required">*</span>
+							</label>
+							<input type="text" class="form-input form-wide" id="name" value="{{old('name')}}" name="name" />
+							@error('name')
+								<span class="invalid-feedback" role="alert">{{ $message }}</span>
+							@enderror
+
+
+							<label for="register_email">
 								Email address
 								<span class="required">*</span>
 							</label>
-							<input type="email" class="form-input form-wide" id="register-email" required />
+							<input type="email" class="form-input form-wide" id="register_email" value="{{old('register_email')}}" name="register_email" />
+							@error('register_email')
+								<span class="invalid-feedback" role="alert">{{ $message }}</span>
+							@enderror
 
-							<label for="register-password">
+
+
+							<label for="phone">
+								Phone number
+								<span class="required">*</span>
+							</label>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+								  <span class="input-group-text" id="phone">+880</span>
+								</div>
+								<input type="text" class="form-control" placeholder="Phone number" name="phone" value="{{ old('phone') }}">
+							</div>
+							@error('phone')
+								<span class="invalid-feedback" role="alert">{{ $message }}</span>
+							@enderror
+
+
+							<label for="register_password">
 								Password
 								<span class="required">*</span>
 							</label>
-							<input type="password" class="form-input form-wide" id="register-password"
-								required />
+							<input type="password" class="form-input form-wide" id="register_password" value="{{old('register_password')}}" name="register_password" />
+							@error('register_password')
+								<span class="invalid-feedback" role="alert">{{ $message }}</span>
+							@enderror
+
+							<label for="register_password_confirmation">
+								Confirmn Password
+								<span class="required">*</span>
+							</label>
+							<input type="password" class="form-input form-wide" id="register_password_confirmation" value="{{old('register_password_confirmation')}}" name="register_password_confirmation" />
+							@error('register_password_confirmation')
+								<span class="invalid-feedback" role="alert">{{ $message }}</span>
+							@enderror
+
+
+							
 
 							<div class="form-footer mb-2">
 								<button type="submit" class="btn btn-dark btn-md w-100 mr-0">

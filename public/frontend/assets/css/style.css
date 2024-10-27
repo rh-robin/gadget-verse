@@ -10106,7 +10106,7 @@ footer .contact-info-label {
 
 .header-middle {
   display: flex;
-  padding: 2.7rem 0;
+  padding: 1.2rem 0 !important;
   border-top: 1px solid #e7e7e7;
 }
 

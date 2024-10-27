@@ -9,12 +9,21 @@ use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\SubSubCategoryController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
-use App\Http\Controllers\Backend\ColorController;
+use App\Http\Controllers\Backend\CouponController;
+use App\Http\Controllers\Backend\ShippingAreaController;
+use App\Http\Controllers\Backend\OrderController;
+use App\Http\Controllers\Backend\ReportController;
+use App\Http\Controllers\Backend\SettingController;
+use App\Http\Controllers\Backend\ReviewController;
 
 
 // frontend controllers
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\LanguageController;
+use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\AllUserController;
 
 
 use App\Models\User;
@@ -124,6 +133,7 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     /* admin slider routes */
     Route::prefix('slider')->group(function () {
         Route::get('/view',[SliderController::class,'view'])->name('slider.view');
+        Route::get('/add',[SliderController::class,'add'])->name('slider.add');
         Route::post('/store',[SliderController::class,'store'])->name('slider.store');
         Route::get('/edit/{id}',[SliderController::class,'edit'])->name('slider.edit');
         Route::post('/update',[SliderController::class,'update'])->name('slider.update');
@@ -132,16 +142,91 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::get('/delete/{id}',[SliderController::class,'delete'])->name('slider.delete');
     }); // end all slider routes
 
-    /* admin color routes */
-    /* Route::prefix('color')->group(function () {
-        Route::get('/view',[ColorController::class,'view'])->name('color.view');
-        Route::post('/store',[ColorController::class,'store'])->name('color.store');
-        Route::get('/edit/{id}',[ColorController::class,'edit'])->name('color.edit');
-        Route::post('/update',[ColorController::class,'update'])->name('color.update');
-        Route::get('/active/{id}',[ColorController::class,'active'])->name('color.active');
-        Route::get('/inactive/{id}',[ColorController::class,'inactive'])->name('color.inactive');
-        Route::get('/delete/{id}',[ColorController::class,'delete'])->name('color.delete');
-    }); */ // end all slider routes
+    /* admin coupon routes */
+    Route::prefix('coupon')->group(function () {
+        Route::get('/view',[CouponController::class,'view'])->name('coupon.view');
+        Route::post('/store',[CouponController::class,'store'])->name('coupon.store');
+        Route::get('/edit/{id}',[CouponController::class,'edit'])->name('coupon.edit');
+        Route::post('/update/{id}',[CouponController::class,'update'])->name('coupon.update');
+        Route::get('/active/{id}',[CouponController::class,'active'])->name('coupon.active');
+        Route::get('/inactive/{id}',[CouponController::class,'inactive'])->name('coupon.inactive');
+        Route::get('/delete/{id}',[CouponController::class,'delete'])->name('coupon.delete');
+    }); // end all coupon routes
+
+    /* admin shipping routes */
+    Route::prefix('shipping')->group(function () {
+        //divisions
+        Route::get('/division/view',[ShippingAreaController::class,'divisionView'])->name('division.view');
+        Route::post('/division/store',[ShippingAreaController::class,'divisionStore'])->name('division.store');
+        Route::get('/division/edit/{id}',[ShippingAreaController::class,'divisionEdit'])->name('division.edit');
+        Route::post('/division/update/{id}',[ShippingAreaController::class,'divisionUpdate'])->name('division.update');
+        Route::get('/division/active/{id}',[ShippingAreaController::class,'divisionActive'])->name('division.active');
+        Route::get('/division/inactive/{id}',[ShippingAreaController::class,'divisionInactive'])->name('division.inactive');
+        Route::get('/division/delete/{id}',[ShippingAreaController::class,'divisionDelete'])->name('division.delete');
+
+        //districts
+        Route::get('/district/view',[ShippingAreaController::class,'districtView'])->name('district.view');
+        Route::post('/district/store',[ShippingAreaController::class,'districtStore'])->name('district.store');
+        Route::get('/district/edit/{id}',[ShippingAreaController::class,'districtEdit'])->name('district.edit');
+        Route::post('/district/update/{id}',[ShippingAreaController::class,'districtUpdate'])->name('district.update');
+        Route::get('/district/active/{id}',[ShippingAreaController::class,'districtActive'])->name('district.active');
+        Route::get('/district/inactive/{id}',[ShippingAreaController::class,'districtInactive'])->name('district.inactive');
+        Route::get('/district/delete/{id}',[ShippingAreaController::class,'districtDelete'])->name('district.delete');
+    }); // end all shipping routes
+
+    /* admin order routes */
+    Route::prefix('order')->group(function () {
+        Route::get('/pending/view',[OrderController::class,'pendingOrders'])->name('order.pending.view');
+        Route::get('/details/{id}',[OrderController::class,'orderDetails'])->name('order.details');
+        Route::get('/accepted/view',[OrderController::class,'acceptedOrders'])->name('order.accepted.view');
+        Route::get('/processing/view',[OrderController::class,'processingOrders'])->name('order.processing.view');
+        Route::get('/picked/view',[OrderController::class,'pickedOrders'])->name('order.picked.view');
+        Route::get('/shipped/view',[OrderController::class,'shippedOrders'])->name('order.shipped.view');
+        Route::get('/delivered/view',[OrderController::class,'deliveredOrders'])->name('order.delivered.view');
+        Route::get('/canceled/view',[OrderController::class,'canceledOrders'])->name('order.canceled.view');
+
+        //update status
+        Route::get('/pending/accept/{id}',[OrderController::class,'pendingToAccept'])->name('pending-accept');
+        Route::get('/pending/cancel/{id}',[OrderController::class,'pendingToCancel'])->name('pending-cancel');
+        Route::get('/accept/processing/{id}',[OrderController::class,'acceptToProcessing'])->name('accept-processing');
+        Route::get('/processing/picked/{id}',[OrderController::class,'processingToPicked'])->name('processing-picked');
+        Route::get('/picked/shipped/{id}',[OrderController::class,'pickedToShipped'])->name('picked-shipped');
+        Route::get('/shipped/delivered/{id}',[OrderController::class,'shippedToDelivered'])->name('shipped-delivered');
+
+        //invoice download
+        Route::get('/invoice/download/{id}',[OrderController::class,'invoiceDownload'])->name('invoice.download');
+    }); // end all order routes
+
+
+    /* admin report routes */
+    Route::prefix('report')->group(function () {
+        Route::get('/search',[ReportController::class,'searchReport'])->name('report.search');
+        Route::post('/date',[ReportController::class,'reportByDate'])->name('report-by-date');
+        Route::post('/month',[ReportController::class,'reportByMonth'])->name('report-by-month');
+        Route::post('/year',[ReportController::class,'reportByYear'])->name('report-by-year');
+    }); // end all report routes
+
+    /* admin users routes */
+    Route::prefix('user')->group(function () {
+        Route::get('/all',[AdminProfileController::class,'allUsers'])->name('user.all');
+    }); // end all users routes
+
+    /* admin settings routes */
+    Route::prefix('settings')->group(function () {
+        Route::get('/site',[SettingController::class,'siteSetting'])->name('site.setting');
+        Route::post('/site',[SettingController::class,'settingUpdate'])->name('setting.update');
+    }); // end all settings routes
+
+    /* admin settings routes */
+    Route::prefix('review')->group(function () {
+        Route::get('/',[ReviewController::class,'view'])->name('review.view');
+        Route::get('/edit/{id}',[ReviewController::class,'edit'])->name('review.edit');
+        Route::post('/update',[ReviewController::class,'update'])->name('review.update');
+        Route::get('/approve/{id}',[ReviewController::class,'approve'])->name('review.approve');
+        Route::get('/reject/{id}',[ReviewController::class,'reject'])->name('review.reject');
+        Route::get('/delete/{id}',[ReviewController::class,'delete'])->name('review.delete');
+    }); // end all settings routes
+    
 }); /* ********** end admin all routes ************* */
 
 
@@ -163,23 +248,85 @@ Route::middleware([
         return view('dashboard', compact('user'));
     })->name('dashboard');
 });
-Route::get('/user/logout',[IndexController::class,'userLogout'])->name('user.logout');
-Route::get('/user/profile',[IndexController::class,'userProfile'])->name('user.profile');
-Route::post('/user/profile/store',[IndexController::class,'userProfileStore'])->name('user.profile.store');
-Route::get('/user/change-password',[IndexController::class,'userChangePassword'])->name('user.changePassword');
-Route::post('/user/update-password',[IndexController::class,'userUpdatePassword'])->name('user.updatePassword');
+
+
+
+
 
 
 
 /* ******************* frontend all routes ****************** */
 /* ******* language all routes ******** */
-Route::get('/language/english',[LanguageController::class,'english'])->name('language.english');
-Route::get('/language/bangla',[LanguageController::class,'bangla'])->name('language.bangla');
+/* Route::get('/language/english',[LanguageController::class,'english'])->name('language.english');
+Route::get('/language/bangla',[LanguageController::class,'bangla'])->name('language.bangla'); */
 
 // Frontend Product Details Page url 
 Route::get('/product/details/{id}/{slug}', [IndexController::class, 'productDetails'])->name('product.details');
 Route::get('/fetch-varaition/{id}/{size}/{color}', [IndexController::class, 'fetchVariation']);
+//product quickview
 Route::get('/product/quickview/{id}', [IndexController::class, 'productQuickview']);
+
+
+
+/* =================== category wise product =================== */
+Route::get('/category/{id}/{slug}', [IndexController::class, 'categoryWiseProduct'])->name('category.product');
+Route::get('/subcategory/{id}/{slug}', [IndexController::class, 'subCategoryWiseProduct'])->name('subcategory.product');
+Route::get('/subsubcategory/{id}/{slug}', [IndexController::class, 'subSubCategoryWiseProduct'])->name('subsubcategory.product');
+
+
+/* ============= cart route =========== */
+Route::post('/cart/data/store/{id}', [CartController::class, 'addToCart']);
+Route::GET('/cart/data/remove/{id}', [CartController::class, 'removeFromCart']);
+Route::GET('/cart', [CartController::class, 'viewCart'])->name('cart.view');
+Route::GET('/cart/get-content', [CartController::class, 'getCartContent']);
+Route::get('/product/minicart', [CartController::class, 'miniCart']);
+Route::get('/cart/item/increment/{id}', [CartController::class, 'cartIncrement']);
+Route::get('/cart/item/decrement/{id}', [CartController::class, 'cartDecrement']);
+
+
+/* =========== coupon apply =========== */
+Route::post('/coupon-apply', [CartController::class, 'couponApply']);
+Route::get('/coupon-calculation', [CartController::class, 'couponCalculation']);
+Route::get('/coupon-remove', [CartController::class, 'couponRemove']);
+
+
+/* =========== refer-code apply =========== */
+Route::post('/refer-code-apply', [CartController::class, 'referCodeApply']);
+Route::get('/refer-calculation', [CartController::class, 'referCalculation']);
+Route::get('/refer-remove', [CartController::class, 'referRemove']);
+
+
+
+Route::group(['middleware' => ['auth'], 'namespace' => 'user'], function(){
+    /* =========== checkout =========== */
+    Route::get('/checkout', [CheckoutController::class, 'createCheckout'])->name('checkout');
+    Route::get('/get-district-ajax/{id}', [CheckoutController::class, 'getDistrict']);
+    Route::get('/get-shipping-charge/{value}', [CheckoutController::class, 'getShippingCharge']);
+
+    /* =========== review =========== */
+    Route::post('/submit-review', [ReviewController::class, 'submitReview']);
+});
+
+
+
+/* =========== user routes with middleware ========== */
+Route::group(['prefix' => 'user', 'middleware' => ['auth'], 'namespace' => 'user'], function(){
+    Route::get('/logout',[UserController::class,'userLogout'])->name('user.logout');
+    Route::get('/profile',[UserController::class,'userProfile'])->name('user.profile');
+    Route::post('/profile/store',[UserController::class,'userProfileStore'])->name('user.profile.store');
+    Route::get('/change-password',[UserController::class,'userChangePassword'])->name('user.changePassword');
+    Route::post('/update-password',[UserController::class,'userUpdatePassword'])->name('user.updatePassword');
+    
+    Route::post('/order/create', [CheckoutController::class, 'orderCreate'])->name('order.create');
+    Route::get('/order/completion/{id}', [CheckoutController::class, 'orderCompletion'])->name('order.completion');
+    Route::get('/order/confirm/{id}', [CheckoutController::class, 'orderConfirm'])->name('order.confirm');
+
+    Route::get('/orders', [AllUserController::class, 'userAllOrders'])->name('user.orders');
+    Route::get('/order/{id}', [AllUserController::class, 'orderDetails'])->name('user.order.details');
+    Route::get('/order/invoice/{id}', [AllUserController::class, 'invoiceDownload'])->name('user.order.invoice');
+});
+
+
 
 
 

@@ -38,10 +38,10 @@
                         <div class="row"> {{-- start 1st row --}}
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <h5>Select Brand <span class="text-danger">*</span></h5>
+                                    <h5>Select Brand <span class="text-danger"></span></h5>
                                     <div class="controls">
                                         <select name="brand_id" id="select" class="form-control" aria-invalid="false">
-                                            <option value="" selected disabled>Select Brand</option>
+                                            <option value="" selected>Select Brand</option>
                                             @foreach ($brands as $brand)
                                             <option value="{{ $brand->id }}" {{ $brand->id== $product->brand_id ? 'selected' : '' }}>{{ $brand->brand_name_en }}</option>
                                             @endforeach
@@ -70,10 +70,10 @@
                             </div>{{-- end col-md-4 --}}
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <h5>Select Sub-Category <span class="text-danger">*</span></h5>
+                                    <h5>Select Sub-Category <span class="text-danger"></span></h5>
                                     <div class="controls">
                                         <select name="subcategory_id" id="select" class="form-control" aria-invalid="false">
-                                            <option value="" selected disabled>Select Sub-Category</option>
+                                            <option value="" selected>Select Sub-Category</option>
                                             @foreach ($subcategories as $subcategory)
                                             <option value="{{ $subcategory->id }}" {{ $subcategory->id== $product->sub_category_id ? 'selected' : '' }}>{{ $subcategory->subcategory_name }}</option>
                                             @endforeach
@@ -89,10 +89,10 @@
                         <div class="row"> {{-- start 2nd row --}}
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <h5>Select Sub Sub-Category <span class="text-danger">*</span></h5>
+                                    <h5>Select Sub Sub-Category <span class="text-danger"></span></h5>
                                     <div class="controls">
                                         <select name="subsubcategory_id" id="select" class="form-control" aria-invalid="false">
-                                            <option value="" selected disabled>Select Sub Sub-Category</option>
+                                            <option value="" selected>Select Sub Sub-Category</option>
                                             @foreach ($subsubcategories as $subsubcategory)
                                             <option value="{{ $subsubcategory->id }}" {{ $subsubcategory->id== $product->sub_sub_category_id ? 'selected' : '' }}>{{ $subsubcategory->subsubcategory_name }}</option>
                                             @endforeach
@@ -340,15 +340,16 @@
                                 <div class="form-group">
                                     <h5>Product Video Embed Code <span class="text-danger"></span></h5>
                                     <div class="controls">
-                                        <textarea name="embed_code" class="form-control" onchange="loadVideo(this)">{{ optional($product->productVideo)->embed_code }}</textarea> <div class="help-block"></div>
+                                        <input name="embed_code" class="form-control" onchange="loadVideo()" value="{{ optional($product->productVideo)->embed_code }}"> <div class="help-block"></div>
                                     </div>
                                     
                                     @error('embed_code')
                                     <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
                                     @enderror
                                 </div> {{-- end form group --}}
-                                <div class="video_container" style="width: 500px; {{ optional($product->productVideo)->embed_code ? 'height: 300px;' : '' }}">
-                                    {!! optional($product->productVideo)->embed_code !!}
+                                
+                                <div class="video_container" style="height: 0px">
+                                    <iframe class="iframe" width="500" height="0" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                 </div>
                             </div> {{-- end col-md-4 --}}
                         </div> {{-- end 6th row --}}
@@ -653,7 +654,7 @@
                     dataType: "json",
                     success: function(data){
                         var d = $('select[name="subcategory_id"]').empty();
-                        d = d.append('<option value="" selected disabled>Select Sub-Category</option>')
+                        d = d.append('<option value="" selecte>Select Sub-Category</option>')
                         $.each(data, function(key, value){
                             d.append('<option value="'+value.id+'">'+value.subcategory_name+'</option>');
                         });
@@ -675,7 +676,7 @@
                     success: function(data){
                         console.log(data);
                         var d = $('select[name="subsubcategory_id"]').empty();
-                        d = d.append('<option value="" selected disabled>Select Sub Sub-Category</option>')
+                        d = d.append('<option value="" selected>Select Sub Sub-Category</option>')
                         $.each(data, function(key, value){
                             d.append('<option value="'+value.id+'">'+value.subsubcategory_name+'</option>');
                         });
@@ -1048,16 +1049,20 @@
 
 {{-- load embeded video --}}
 <script>
-    function loadVideo(input) {
-        // Get the value of the input field
-        let embedCode = input.value;
-
-        // Get the video container element
+    function loadVideo() {
         let videoContainer = document.querySelector('.video_container');
-
-        videoContainer.innerHTML=embedCode;
-        videoContainer.style.height = '281.25px';
+        let iframe = document.querySelector('.iframe');
+        let embedCode = document.querySelector('input[name="embed_code"]').value;
+        if (embedCode == '' || embedCode == '.') {
+            videoContainer.style.height= "0px";
+            iframe.height = '0';
+        }else{
+            videoContainer.style.height= "281.25px";
+            iframe.src=embedCode;
+            iframe.height = '281.25';
+        }
     }
+    loadVideo();
 </script>
 
 

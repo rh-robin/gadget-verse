@@ -2,7 +2,7 @@
 @section('title')
 {{ $product->product_name }}
 @endsection
-@section('content')
+
 
 @section('content')
 <main class="main">
@@ -14,9 +14,9 @@
 
     <div class="container">
         <nav aria-label="breadcrumb" class="breadcrumb-nav">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="demo4.html"><i class="icon-home"></i></a></li>
-                <li class="breadcrumb-item"><a href="#">Products</a></li>
+            <ol class="breadcrumb" style="padding: 0">
+                <li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="">{{ $product->product_name }}</a></li>
             </ol>
         </nav>
 
@@ -27,17 +27,25 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-5 col-md-6 product-single-gallery">
+                <div class="col-lg-4 col-md-4 product-single-gallery">
                     <div class="product-slider-container">
                         <div class="label-group">
-                            <div class="product-label label-hot">HOT</div>
+                            {{-- <div class="product-label label-hot">HOT</div>
 
                             <div class="product-label label-sale">
                                 -16%
-                            </div>
+                            </div> --}}
                         </div>
 
                         <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">
+                            @if ($product->product3dImage !== null)
+                                <div class="product-item product3d-model">
+                                    <button class="btn btn-primary floating-button" title="View 3d Model" data-toggle="modal" data-target="#exampleModal"><i class="fa-brands fa-unity" style="font-size: 25px"></i></button>
+                                    <canvas class="webgl1" ></canvas>
+                                </div>
+                            @endif
+                            
+
                             <div class="product-item">
                                 <img class="product-single-image"
                                     src="{{ asset($product->product_thumbnail) }}"
@@ -67,6 +75,14 @@
                     
 
                     <div class="prod-thumbnail owl-dots" id="owlDots">
+                        @if ($product->product3dImage !== null)
+                        <div class="owl-dot">
+                            <img src="{{ asset("upload/3d.png") }}" width="110" height="110"
+                                alt="product-thumbnail" />
+                        </div>
+                        @endif
+                        
+
                         <div class="owl-dot">
                             <img src="{{ asset($product->product_thumbnail) }}" width="110" height="110"
                                 alt="product-thumbnail" />
@@ -89,8 +105,8 @@
                     </div>
                 </div><!-- End .product-single-gallery -->
 
-                <div class="col-lg-7 col-md-6 product-single-details">
-                    <h1 class="product-title">{{ $product->product_name }}</h1>
+                <div class="col-lg-4 col-md-4 product-single-details">
+                    <h1 class="product-title" id="productName">{{ $product->product_name }}</h1>
 
                     
 
@@ -144,8 +160,22 @@
                             SKU: <strong>{{ $product->product_sku }}</strong>
                         </li>
 
-                        <li>
-                            CATEGORY: <strong><a href="#" class="product-category">{{ $product->category->category_name }}</a></strong>
+                        {{-- <li>
+                            Brand: <strong>{{ $product->brand }}</strong>
+                        </li> --}}
+
+                        <li> 
+                            CATEGORY: 
+                            <strong><a href="#" class="product-category">{{ $product->category->category_name }} </a>
+                                @if ($product->subCategory !== null)
+                                -> <a href="#" class="product-category">{{ $product->subCategory->subcategory_name }} </a>
+                                @endif
+
+                                @if ($product->subSubCategory !== null)
+                                -> <a href="#" class="product-category">{{ $product->subSubCategory->subsubcategory_name }} </a>
+                                @endif
+                            </strong>
+                            
                         </li>
 
                         <li>
@@ -232,21 +262,20 @@
                     </div>
 
 
-            {{-- kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkllllllllllllllk --}}
+            
 
                     
-
+                    <input type="hidden" name="product_id" value="{{ $product->id }}" id="productId">
                     <div class="product-action">
                         <div class="price-box product-filtered-price d-none" id="priceBox">
                         </div>
                         <div class="product-single-qty">
-                            <input class="horizontal-quantity form-control" type="text">
+                            <input class="horizontal-quantity form-control" type="text" id="qty">
                         </div><!-- End .product-single-qty -->
 
-                        <a href="javascript:;" class="btn btn-dark add-cart mr-2" title="Add to Cart">Add to
-                            Cart</a>
+                        <a href="javascript:;" class="btn btn-dark mr-2 disabled" title="Add to Cart" id="addToCartBtn" onclick="addToCart()">Add to Cart</a>
 
-                        <a href="cart.html" class="btn btn-gray view-cart d-none">View cart</a>
+                        
                     </div><!-- End .product-action -->
 
                     <hr class="divider mb-0 mt-0">
@@ -255,23 +284,36 @@
                         <label class="sr-only">Share:</label>
 
                         <div class="social-icons mr-2">
-                            <a href="#" class="social-icon social-facebook icon-facebook" target="_blank"
-                                title="Facebook"></a>
-                            <a href="#" class="social-icon social-twitter icon-twitter" target="_blank"
-                                title="Twitter"></a>
-                            <a href="#" class="social-icon social-linkedin fab fa-linkedin-in" target="_blank"
-                                title="Linkedin"></a>
-                            <a href="#" class="social-icon social-gplus fab fa-google-plus-g" target="_blank"
-                                title="Google +"></a>
-                            <a href="#" class="social-icon social-mail icon-mail-alt" target="_blank"
-                                title="Mail"></a>
+                            
+                                {!! $shareButtons !!}
                         </div><!-- End .social-icons -->
 
-                        <a href="wishlist.html" class="btn-icon-wish add-wishlist" title="Add to Wishlist"><i
+                        {{-- <a href="wishlist.html" class="btn-icon-wish add-wishlist" title="Add to Wishlist"><i
                                 class="icon-wishlist-2"></i><span>Add to
-                                Wishlist</span></a>
+                                Wishlist</span></a> --}}
                     </div><!-- End .product single-share -->
                 </div><!-- End .product-single-details -->
+
+                <div class="col-g-4 col-md-4 product-video">
+                @if ($product->productVideo !== null)
+                    @if ($product->productVideo->video_priority == 1)
+                        @if ($product->productVideo->embed_code !==null)
+                        <iframe width="100%" height="300" src="{{ $product->productVideo->embed_code }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        @endif
+                    
+                    @elseif ($product->productVideo->video_priority == 2)
+                        @if ($product->productVideo->video_source !==null)
+                        <video width="400" controls>
+                            <source src="{{ $product->productVideo->video_source ? asset($product->productVideo->video_source) : '' }}" type="video/mp4">
+                            Your browser does not support HTML video.
+                        </video>
+                        @endif
+                    
+                    @endif
+                @endif
+                    
+                    
+                </div>  {{-- end column product-video --}}
             </div><!-- End .row -->
         </div><!-- End .product-single-container -->
 
@@ -284,20 +326,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" id="product-tab-size" data-toggle="tab" href="#product-size-content"
-                        role="tab" aria-controls="product-size-content" aria-selected="true">Size Guide</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" id="product-tab-tags" data-toggle="tab" href="#product-tags-content"
-                        role="tab" aria-controls="product-tags-content" aria-selected="false">Additional
-                        Information</a>
-                </li>
-
-                <li class="nav-item">
                     <a class="nav-link" id="product-tab-reviews" data-toggle="tab"
                         href="#product-reviews-content" role="tab" aria-controls="product-reviews-content"
-                        aria-selected="false">Reviews (1)</a>
+                        aria-selected="false">Reviews (<span class="review-count"></span>)</a>
                 </li>
             </ul>
 
@@ -305,149 +336,19 @@
                 <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
                     aria-labelledby="product-tab-desc">
                     <div class="product-desc-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, nostrud ipsum
-                            consectetur sed do, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat.</p>
-                        <ul>
-                            <li>Any Product types that You want - Simple,
-                                Configurable</li>
-                            <li>Downloadable/Digital Products, Virtual
-                                Products</li>
-                            <li>Inventory Management with Backordered items
-                            </li>
-                        </ul>
-                        <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. </p>
+                        {!! $product->long_desc !!}
+
                     </div><!-- End .product-desc-content -->
-                </div><!-- End .tab-pane -->
-
-                <div class="tab-pane fade" id="product-size-content" role="tabpanel"
-                    aria-labelledby="product-tab-size">
-                    <div class="product-size-content">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img src="{{ asset('assets/images/products/single/body-shape.png') }}" alt="body shape"
-                                    width="217" height="398">
-                            </div><!-- End .col-md-4 -->
-
-                            <div class="col-md-8">
-                                <table class="table table-size">
-                                    <thead>
-                                        <tr>
-                                            <th>SIZE</th>
-                                            <th>CHEST(in.)</th>
-                                            <th>WAIST(in.)</th>
-                                            <th>HIPS(in.)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>XS</td>
-                                            <td>34-36</td>
-                                            <td>27-29</td>
-                                            <td>34.5-36.5</td>
-                                        </tr>
-                                        <tr>
-                                            <td>S</td>
-                                            <td>36-38</td>
-                                            <td>29-31</td>
-                                            <td>36.5-38.5</td>
-                                        </tr>
-                                        <tr>
-                                            <td>M</td>
-                                            <td>38-40</td>
-                                            <td>31-33</td>
-                                            <td>38.5-40.5</td>
-                                        </tr>
-                                        <tr>
-                                            <td>L</td>
-                                            <td>40-42</td>
-                                            <td>33-36</td>
-                                            <td>40.5-43.5</td>
-                                        </tr>
-                                        <tr>
-                                            <td>XL</td>
-                                            <td>42-45</td>
-                                            <td>36-40</td>
-                                            <td>43.5-47.5</td>
-                                        </tr>
-                                        <tr>
-                                            <td>XXL</td>
-                                            <td>45-48</td>
-                                            <td>40-44</td>
-                                            <td>47.5-51.5</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div><!-- End .row -->
-                    </div><!-- End .product-size-content -->
-                </div><!-- End .tab-pane -->
-
-                <div class="tab-pane fade" id="product-tags-content" role="tabpanel"
-                    aria-labelledby="product-tab-tags">
-                    <table class="table table-striped mt-2">
-                        <tbody>
-                            <tr>
-                                <th>Weight</th>
-                                <td>23 kg</td>
-                            </tr>
-
-                            <tr>
-                                <th>Dimensions</th>
-                                <td>12 × 24 × 35 cm</td>
-                            </tr>
-
-                            <tr>
-                                <th>Color</th>
-                                <td>Black, Green, Indigo</td>
-                            </tr>
-
-                            <tr>
-                                <th>Size</th>
-                                <td>Large, Medium, Small</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div><!-- End .tab-pane -->
 
                 <div class="tab-pane fade" id="product-reviews-content" role="tabpanel"
                     aria-labelledby="product-tab-reviews">
                     <div class="product-reviews-content">
-                        <h3 class="reviews-title">1 review for Men Black Sports Shoes</h3>
+                        <h3 class="reviews-title"><span class="review-count"></span> review for {{$product->product_name}}</h3>
 
                         <div class="comment-list">
-                            <div class="comments">
-                                <figure class="img-thumbnail">
-                                    <img src="{{ asset('assets/images/blog/author.jpg') }}" alt="author" width="80"
-                                        height="80">
-                                </figure>
-
-                                <div class="comment-block">
-                                    <div class="comment-header">
-                                        <div class="comment-arrow"></div>
-
-                                        <div class="ratings-container float-sm-right">
-                                            <div class="product-ratings">
-                                                <span class="ratings" style="width:60%"></span>
-                                                <!-- End .ratings -->
-                                                <span class="tooltiptext tooltip-top"></span>
-                                            </div><!-- End .product-ratings -->
-                                        </div>
-
-                                        <span class="comment-by">
-                                            <strong>Joe Doe</strong> – April 12, 2018
-                                        </span>
-                                    </div>
-
-                                    <div class="comment-content">
-                                        <p>Excellent.</p>
-                                    </div>
-                                </div>
-                            </div>
+                            
+                            
                         </div>
 
                         <div class="divider"></div>
@@ -455,7 +356,12 @@
                         <div class="add-product-review">
                             <h3 class="review-title">Add a review</h3>
 
-                            <form action="#" class="comment-form m-0">
+                            @guest
+                            <h4 class="text-center text-danger">You have to login to add a review</h4>
+                            @else
+                            
+                            <form action="" class="comment-form m-0" id="reviewForm">
+                                <input type="hidden" name="product_id" value="{{$product->id}}">
                                 <div class="rating-form">
                                     <label for="rating">Your rating <span class="required">*</span></label>
                                     <span class="rating-stars">
@@ -466,50 +372,20 @@
                                         <a class="star-5" href="#">5</a>
                                     </span>
 
-                                    <select name="rating" id="rating" required="" style="display: none;">
-                                        <option value="">Rate…</option>
-                                        <option value="5">Perfect</option>
-                                        <option value="4">Good</option>
-                                        <option value="3">Average</option>
-                                        <option value="2">Not that bad</option>
-                                        <option value="1">Very poor</option>
-                                    </select>
+                                    
                                 </div>
 
                                 <div class="form-group">
                                     <label>Your review <span class="required">*</span></label>
-                                    <textarea cols="5" rows="6" class="form-control form-control-sm"></textarea>
+                                    <textarea name="review" cols="5" rows="6" class="form-control form-control-sm"></textarea>
                                 </div><!-- End .form-group -->
 
 
-                                <div class="row">
-                                    <div class="col-md-6 col-xl-12">
-                                        <div class="form-group">
-                                            <label>Name <span class="required">*</span></label>
-                                            <input type="text" class="form-control form-control-sm" required>
-                                        </div><!-- End .form-group -->
-                                    </div>
-
-                                    <div class="col-md-6 col-xl-12">
-                                        <div class="form-group">
-                                            <label>Email <span class="required">*</span></label>
-                                            <input type="text" class="form-control form-control-sm" required>
-                                        </div><!-- End .form-group -->
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input"
-                                                id="save-name" />
-                                            <label class="custom-control-label mb-0" for="save-name">Save my
-                                                name, email, and website in this browser for the next time I
-                                                comment.</label>
-                                        </div>
-                                    </div>
-                                </div>
+                                
 
                                 <input type="submit" class="btn btn-primary" value="Submit">
                             </form>
+                            @endguest
                         </div><!-- End .add-product-review -->
                     </div><!-- End .product-reviews-content -->
                 </div><!-- End .tab-pane -->
@@ -1064,7 +940,30 @@
         </div><!-- End .row -->
     </div><!-- End .container -->
 </main><!-- End .main -->
-{{-- <div class="owl-item active"></div> --}}
+
+
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body d-flex justify-content-center">
+            <canvas class="webgl2" ></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
 
 {{-- handle color and size checkbox --}}
 <script>
@@ -1101,6 +1000,7 @@
         var sizeCheckboxes = document.getElementsByName('size');
         var clearButtonContainer = document.getElementById('clearButtonContainer');
         var priceBox = document.getElementById('priceBox');
+        var addToCartBtn = document.getElementById('addToCartBtn');
 
         var selectedColor = "";
         var selectedSize = "";
@@ -1121,6 +1021,7 @@
             clearButtonContainer.classList.remove('d-none');
             priceBox.classList.remove('d-none');
             priceBox.classList.add('d-block');
+            addToCartBtn.classList.remove('disabled');
             var productId = {{ $product->id }};
             // Make AJAX request to fetch variation data
             $.ajax({
@@ -1129,10 +1030,16 @@
                 success: function(response) {
                     var sellingPrice = response.selling_price;
                     var discountPrice = response.discount_price;
-                    priceBox.innerHTML = `
-                        <del class="old-price"><span>${sellingPrice}tk</span></del>
-                        <span class="product-price">${discountPrice}tk</span>
-                    `;
+                    if(discountPrice==null){
+                            priceBox.innerHTML = `
+                                <span class="product-price">${sellingPrice}tk</span>
+                            `;
+                    }else{
+                        priceBox.innerHTML = `
+                            <del class="old-price"><span>${sellingPrice}tk</span></del>
+                            <span class="product-price">${discountPrice}tk</span>
+                        `;
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error(error); // Handle any errors
@@ -1140,6 +1047,9 @@
             });
         } else {
             clearButtonContainer.classList.add('d-none');
+            priceBox.classList.add('d-none');
+            priceBox.classList.remove('d-block');
+            addToCartBtn.classList.add('disabled');
         }
     }
 
@@ -1149,6 +1059,7 @@
         var sizeCheckboxes = document.getElementsByName('size');
         var clearButtonContainer = document.getElementById('clearButtonContainer');
         var priceBox = document.getElementById('priceBox');
+        var addToCartBtn = document.getElementById('addToCartBtn');
 
         colorCheckboxes.forEach(function(checkbox) {
             checkbox.checked = false;
@@ -1162,7 +1073,183 @@
         priceBox.classList.add('d-none');
         priceBox.classList.remove('d-block');
         priceBox.innerHTML = ``;
+        addToCartBtn.classList.add('disabled');
     }
 </script>
 
+
+{{-- 3d model  --}}
+<script>
+    var product3dImage = {!! json_encode($product->product3dImage ?? null) !!};
+    if(product3dImage != null){
+        var modelPath = "{{ asset('') }}";
+        modelPath += product3dImage.image_source;
+        console.log(modelPath);
+        var scaleX = product3dImage.scale_x;
+        var scaleY = product3dImage.scale_y;
+        var scaleZ = product3dImage.scale_z;
+        var background = product3dImage.background;
+        var directional_light_color = product3dImage.directional_light_color;
+        var directional_light_opacity = product3dImage.directional_light_opacity;
+        var ambient_light_color = product3dImage.ambient_light_color;
+        var ambient_light_opacity = product3dImage.ambient_light_opacity;
+        var target_x = product3dImage.target_x;
+        var target_y = product3dImage.target_y;
+        var target_z = product3dImage.target_z;
+    }
+</script>
+
+<script type="module" src="{{ asset('frontend/assets/js/3dmodel.js') }}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{{-- ================ add review =============== --}}
+<script>
+    $(document).ready(function() {
+        let rating = 0;
+
+        // Handle rating selection
+        $('.rating-stars a').on('click', function(e) {
+            e.preventDefault();
+            rating = $(this).text();
+        });
+
+        // Handle form submission
+        $('#reviewForm').on('submit', function(e) {
+            e.preventDefault();
+
+            let review = $('textarea[name="review"]').val();
+            let productId = $('input[name="product_id"]').val();
+            if (!rating || !review) {
+                alert('Please provide both a rating and a review.');
+                return;
+            }
+
+            $.ajax({
+                url: '/submit-review',  // Update this URL to your form submission endpoint
+                method: 'POST',
+                data: {
+                    rating: rating,
+                    review: review,
+                    product_id: productId,
+                },
+                success: function(data) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    if($.isEmptyObject(data.error)){
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.success
+                        });
+                    }else{
+                        Toast.fire({
+                            icon: "error",
+                            title: data.error
+                        });
+                    }
+                    $('#reviewForm')[0].reset();
+                    $('.rating-stars a').removeClass('active');
+                    rating = 0;
+                },
+                error: function(xhr) {
+                    alert('An error occurred while submitting your review. Please try again.');
+                }
+            });
+        });
+
+
+        /* load reviews */
+        let reviews = {!! json_encode($reviews) !!};
+        $('.review-count').text(reviews.length)
+        reviews.forEach(function(review) {
+            // Convert the review's created_at timestamp to a Date object
+            let reviewDate = new Date(review.created_at);
+
+            // Format the date as "Month Day, Year"
+            let options = { month: 'long', day: 'numeric', year: 'numeric' };
+            let formattedDate = reviewDate.toLocaleDateString('en-US', options);
+
+            let reviewHtml = `
+                <div class="comments mb-2" id="singleComment">
+                    <figure class="img-thumbnail">
+                        <img src="{{ asset('upload/user_images/${review.user.profile_photo_path}') }}" alt="author" width="80" height="80">
+                    </figure>
+                    <div class="comment-block">
+                        <div class="comment-header">
+                            <div class="comment-arrow"></div>
+                            <div class="ratings-container float-sm-right">
+                                <div class="product-ratings">
+                                    <span class="ratings" style="width:${review.rating * 20}%"></span>
+                                    <span class="tooltiptext tooltip-top"></span>
+                                </div>
+                            </div>
+                            <span class="comment-by">
+                                <strong>${review.user.name}</strong> – ${formattedDate}
+                            </span>
+                        </div>
+                        <div class="comment-content">
+                            <p>${review.review}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $('.comment-list').append(reviewHtml);
+        }); /* end foreach */
+    });
+</script>
+
 @endsection
+
+@push('styles')
+<style>
+    .product3d-model {
+        position: relative;
+    }
+
+    .floating-button {
+        position: absolute;
+        top: 10px; /* Pushed down slightly */
+        left: 10px; /* Pushed to the right slightly */
+        z-index: 10;  /* Stacked above the canvas */
+        padding: 5px 10px; /* Adjust padding as needed */
+        border-radius: 4px; /* Optional: rounded corners */
+    }
+
+    .webgl {
+        width: 100%;
+        height: 100%;
+        display: block;
+        background-color: #000; /* Optional: background color for the canvas */
+    }
+    #social-links ul{
+        display: flex !important;
+    }
+    #social-links ul li{
+        margin: 4px;
+        border: 2px solid #e7e7e7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        text-align: center;
+    }
+    #social-links ul li a{
+        color: #222529;
+
+    }
+    #social-links ul li:hover {
+        border: 2px solid var(--primary);
+
+    }
+    #social-links ul li:hover a{
+        color: var(--primary);
+
+    }
+</style>
+@endpush

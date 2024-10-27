@@ -2,6 +2,14 @@
 @section('title')
 Gadget Verse | Online Gadget Shop
 @endsection
+
+@push('styles')
+<style>
+    .carousel .carousel-indicators li {  background-color: gray; }
+.carousel .carousel-indicators li.active { background-color: var(--primary); }
+</style>
+    
+@endpush
 @section('content')
 
 <main class="main home mt-2">
@@ -10,97 +18,83 @@ Gadget Verse | Online Gadget Shop
 
 
     <div class="container mb-2">
-        <div class="info-boxes-container row row-joined mb-2 font2">
-            <div class="info-box info-box-icon-left col-lg-4">
-                <i class="icon-shipping"></i>
-
-                <div class="info-box-content">
-                    <h4>FREE SHIPPING &amp; RETURN</h4>
-                    <p class="text-body">Free shipping on all orders over $99</p>
-                </div>
-                <!-- End .info-box-content -->
-            </div>
-            <!-- End .info-box -->
-
-            <div class="info-box info-box-icon-left col-lg-4">
-                <i class="icon-money"></i>
-
-                <div class="info-box-content">
-                    <h4>MONEY BACK GUARANTEE</h4>
-                    <p class="text-body">100% money back guarantee</p>
-                </div>
-                <!-- End .info-box-content -->
-            </div>
-            <!-- End .info-box -->
-
-            <div class="info-box info-box-icon-left col-lg-4">
-                <i class="icon-support"></i>
-
-                <div class="info-box-content">
-                    <h4>ONLINE SUPPORT 24/7</h4>
-                    <p class="text-body">Lorem ipsum dolor sit amet.</p>
-                </div>
-                <!-- End .info-box-content -->
-            </div>
-            <!-- End .info-box -->
-        </div>
+        
 
         <div class="row">
             <div class="col-lg-9">
-                <div class="home-slider slide-animate owl-carousel owl-theme mb-2" data-owl-options="{
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators" style="bottom: 35px" id="indicators">
+                        @foreach ($sliders as $index => $slider )
+                        <li data-target="#carouselExampleIndicators" data-slide-to="{{$index}}" class="{{ $index==0 ? 'active' : '' }}"></li>
+                        @endforeach
+                    </ol>
+                    <div class="carousel-inner" id="carousel-inner">
+
+                        @foreach ($sliders as $index => $slider )
+                            
+                        
+                        <div class="carousel-item {{ $index==0 ? 'active' : '' }}">
+
+                            <div class="d-flex">
+                                @foreach ($slider->items as $item)
+                                    <div class="card" style="">
+                                        <img src="{{asset($item->image_source)}}" alt="">
+                                        <div class="carousel-caption d-none d-md-block" >
+                                            <h4 class="text-light text-capitalize" style="-webkit-text-stroke: 1px #08c">{{$item->title}}</h4>
+                                            <p class="text-dark">{{$item->sub_title}}</p>
+                                            <a href="{{$item->button_link}}" class="btn btn-primary">Shop now</a>
+                                        </div>
+                                        
+                                    </div>
+                                @endforeach
+                            </div>
+                
+                            
+                        </div> {{-- end carousel-item --}}
+
+                        
+                        @endforeach
+
+                    </div> 
+
+                    <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev" style="border:none; background: transparent; width:50px">
+                        <span class="" aria-hidden="true" style="color:#08c; font-size:20px"><i class="fa-solid fa-chevron-left"></i></span>
+                        <span class="sr-only">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next" style="border:none; background: transparent; width:50px">
+                        <span class="" aria-hidden="true" style="color:#08c; font-size:20px"><i class="fa-solid fa-chevron-right"></i></span>
+                        <span class="sr-only">Next</span>
+                    </button>
+                </div> {{-- end slider --}}
+                {{-- <div class="home-slider slide-animate owl-carousel owl-theme mb-2" data-owl-options="{
                     'loop': false,
                     'dots': true,
                     'nav': false
                 }">
+
+                @foreach ($sliders as $slider)
+                    
                     <div class="home-slide home-slide1 banner banner-md-vw banner-sm-vw d-flex align-items-center">
-                        <img class="slide-bg" style="background-color: #2699D0;" src="{{ asset('frontend/assets/images/demoes/demo1/slider/slide-1.png') }}" width="880" height="428" alt="home-slider">
-                        <div class="banner-layer appear-animate" data-animation-name="fadeInUpShorter">
-                            <h4 class="text-white mb-0">Find the Boundaries. Push Through!</h4>
-                            <h2 class="text-white mb-0">Summer Sale</h2>
-                            <h3 class="text-white text-uppercase m-b-3">70% Off</h3>
-                            <h5 class="text-white text-uppercase d-inline-block mb-0 ls-n-20 align-text-bottom">
-                                Starting At <b class="coupon-sale-text bg-secondary text-white d-inline-block">$<em
-                                        class="align-text-top">199</em>99</b></h5>
-                            <a href="demo1-shop.html" class="btn btn-dark btn-md ls-10">Shop Now!</a>
+
+                        @foreach ($slider->items as $item)
+                        <div class="slider-item card" style="width: 33.33%">
+                            <h2>lkjklj</h2>
                         </div>
-                        <!-- End .banner-layer -->
+                        @endforeach
+                        
+                        
                     </div>
                     <!-- End .home-slide -->
 
-                    <div class="home-slide home-slide2 banner banner-md-vw banner-sm-vw d-flex align-items-center">
-                        <img class="slide-bg" style="background-color: #dadada;" src="{{ asset('frontend/assets/images/demoes/demo1/slider/slide-2.jpg') }}" width="880" height="428" alt="home-slider">
-                        <div class="banner-layer text-uppercase appear-animate" data-animation-name="fadeInUpShorter">
-                            <h4 class="m-b-2">Over 200 products with discounts</h4>
-                            <h2 class="m-b-3">Great Deals</h2>
-                            <h5 class="d-inline-block mb-0 align-top mr-5 mb-2">Starting At
-                                <b>$<em>299</em>99</b>
-                            </h5>
-                            <a href="demo1-shop.html" class="btn btn-dark btn-md ls-10">Get Yours!</a>
-                        </div>
-                        <!-- End .banner-layer -->
-                    </div>
-                    <!-- End .home-slide -->
+                @endforeach
 
-                    <div class="home-slide home-slide3 banner banner-md-vw banner-sm-vw  d-flex align-items-center">
-                        <img class="slide-bg" style="background-color: #e5e4e2;" src="{{ asset('frontend/assets/images/demoes/demo1/slider/slide-3.jpgv') }}" width="880" height="428" alt="home-slider" />
-                        <div class="banner-layer text-uppercase appear-animate" data-animation-name="fadeInUpShorter">
-                            <h4 class="m-b-2">Up to 70% off</h4>
-                            <h2 class="m-b-3">New Arrivals</h2>
-                            <h5 class="d-inline-block mb-0 align-top mr-5 mb-2">Starting At
-                                <b>$<em>299</em>99</b>
-                            </h5>
-                            <a href="demo1-shop.html" class="btn btn-dark btn-md ls-10">Get Yours!</a>
-                        </div>
-                        <!-- End .banner-layer -->
-                    </div>
-                    <!-- End .home-slide -->
-                </div>
+                </div> --}}
                 <!-- End .home-slider -->
 
                 <div class="banners-container m-b-2 owl-carousel owl-theme" data-owl-options="{
-                    'dots': false,
+                    'dots': true,
                     'margin': 20,
-                    'loop': false,
+                    'loop': true,
                     'responsive': {
                         '480': {
                             'items': 2
@@ -147,13 +141,10 @@ Gadget Verse | Online Gadget Shop
 
                 <h2 class="section-title ls-n-10 m-b-4 appear-animate" data-animation-name="fadeInUpShorter">
                     Featured Products</h2>
-
-            
-            
                 <div class="products-slider owl-carousel owl-theme dots-top dots-small m-b-1 pb-1 appear-animate" data-animation-name="fadeInUpShorter">
 
 
-                    @foreach ($products as $product)
+                    @foreach ($featureds as $product)
                     @php
                         $productVariation = App\Models\ProductVariation::where('product_id', $product->id)->orderBy('discount_price')->first();
                     @endphp
@@ -199,20 +190,21 @@ Gadget Verse | Online Gadget Shop
                             
                             <div class="price-box">
                             @if($productVariation->discount_price == null)
-                                <span class="product-price">{{ $productVariation->selling_price }}</span>
+                                <span class="product-price">{{ $productVariation->selling_price }}tk</span>
                             @else
-                                <del class="old-price">{{ $productVariation->selling_price }}</del>
-                                <span class="product-price">{{ $productVariation->discount_price }}</span>
+                                <del class="old-price">{{ $productVariation->selling_price }}tk</del>
+                                <span class="product-price">{{ $productVariation->discount_price }}tk</span>
                             @endif
                             </div>
                             <!-- End .price-box -->
                             <div class="product-action">
-                                <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i
-                                        class="icon-heart"></i></a>
-                                <a href="#" class="btn-icon btn-add-cart product-type-simple"><i
-                                        class="icon-shopping-cart"></i><span>ADD TO CART</span></a>
-                                <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)"><i
-                                        class="fas fa-external-link-alt"></i></a>
+                                {{-- <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i
+                                        class="icon-heart"></i></a> --}}
+                                {{-- <a href="javascript:;" class="btn-icon btn-add-cart" ><i
+                                        class="icon-shopping-cart"></i><span>ADD TO CART</span></a> --}}
+                                {{-- <a href="" class="btn-quickview" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)"><i
+                                        class="fas fa-external-link-alt"></i></a> --}}
+                                <a href="" class="btn-icon btn-add-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)">ADD TO CART</a>
                             </div>
                         </div>
                         <!-- End .product-details -->
@@ -220,13 +212,242 @@ Gadget Verse | Online Gadget Shop
                     @endforeach
 
                 </div>
-            
-
                 <!-- End .featured-proucts -->
 
 
+                <h2 class="section-title ls-n-10 m-b-4 appear-animate" data-animation-name="fadeInUpShorter">
+                    Hot Deals</h2>
+                <div class="products-slider owl-carousel owl-theme dots-top dots-small m-b-1 pb-1 appear-animate" data-animation-name="fadeInUpShorter">
+
+
+                    @foreach ($hotDeals as $product)
+                    @php
+                        $productVariation = App\Models\ProductVariation::where('product_id', $product->id)->orderBy('discount_price')->first();
+                    @endphp
+                    <div class="product-default appear-animate" data-animation-name="fadeInRightShorter">
+                        <figure>
+                            <a href="{{ route('product.details', [$product->id, $product->product_slug]) }}">
+                                <img src="{{ asset($product->product_thumbnail) }}" width="220" height="220" alt="product">
+                            </a>
+                        @php
+                            $amount = $productVariation->selling_price- $productVariation->discount_price;
+                            $discount=null;
+                            if($amount>1){
+                                $discount = ($amount/$productVariation->selling_price)*100;
+                            }
+                        @endphp
+                        @if ($discount == null || $productVariation->discount_price==null)
+                            <div class="label-group">
+                                <div class="product-label label-hot">NEW</div>
+                            </div>
+                        @else
+                            <div class="label-group">
+                                <div class="product-label label-hot bg-danger">-{{ round($discount) }}%</div>
+                            </div>
+                        @endif
+                            
+                        </figure>
+                        <div class="product-details">
+                            <div class="category-list">
+                                <a href="category.html" class="product-category">{{ $product->category->category_name }}</a>
+                            </div>
+                            <h3 class="product-title">
+                                <a href="{{ route('product.details', [$product->id, $product->product_slug]) }}">{{ $product->product_name }}</a>
+                            </h3>
+                            <div class="ratings-container">
+                                <div class="product-ratings">
+                                    <span class="ratings" style="width:80%"></span>
+                                    <!-- End .ratings -->
+                                    <span class="tooltiptext tooltip-top"></span>
+                                </div>
+                                <!-- End .product-ratings -->
+                            </div>
+                            <!-- End .product-container -->
+                            
+                            <div class="price-box">
+                            @if($productVariation->discount_price == null)
+                                <span class="product-price">{{ $productVariation->selling_price }}tk</span>
+                            @else
+                                <del class="old-price">{{ $productVariation->selling_price }}tk</del>
+                                <span class="product-price">{{ $productVariation->discount_price }}tk</span>
+                            @endif
+                            </div>
+                            <!-- End .price-box -->
+                            <div class="product-action">
+                                {{-- <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i
+                                        class="icon-heart"></i></a> --}}
+                                {{-- <a href="javascript:;" class="btn-icon btn-add-cart" ><i
+                                        class="icon-shopping-cart"></i><span>ADD TO CART</span></a> --}}
+                                {{-- <a href="" class="btn-quickview" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)"><i
+                                        class="fas fa-external-link-alt"></i></a> --}}
+                                <a href="" class="btn-icon btn-add-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)">ADD TO CART</a>
+                            </div>
+                        </div>
+                        <!-- End .product-details -->
+                    </div> {{-- end product default --}}
+                    @endforeach
+
+                </div>
+                <!-- End Hot deals -->
+
+
+                <h2 class="section-title ls-n-10 m-b-4 appear-animate" data-animation-name="fadeInUpShorter">
+                    Special Offers</h2>
+                <div class="products-slider owl-carousel owl-theme dots-top dots-small m-b-1 pb-1 appear-animate" data-animation-name="fadeInUpShorter">
+
+
+                    @foreach ($specialOffer as $product)
+                    @php
+                        $productVariation = App\Models\ProductVariation::where('product_id', $product->id)->orderBy('discount_price')->first();
+                    @endphp
+                    <div class="product-default appear-animate" data-animation-name="fadeInRightShorter">
+                        <figure>
+                            <a href="{{ route('product.details', [$product->id, $product->product_slug]) }}">
+                                <img src="{{ asset($product->product_thumbnail) }}" width="220" height="220" alt="product">
+                            </a>
+                        @php
+                            $amount = $productVariation->selling_price- $productVariation->discount_price;
+                            $discount=null;
+                            if($amount>1){
+                                $discount = ($amount/$productVariation->selling_price)*100;
+                            }
+                        @endphp
+                        @if ($discount == null || $productVariation->discount_price==null)
+                            <div class="label-group">
+                                <div class="product-label label-hot">NEW</div>
+                            </div>
+                        @else
+                            <div class="label-group">
+                                <div class="product-label label-hot bg-danger">-{{ round($discount) }}%</div>
+                            </div>
+                        @endif
+                            
+                        </figure>
+                        <div class="product-details">
+                            <div class="category-list">
+                                <a href="category.html" class="product-category">{{ $product->category->category_name }}</a>
+                            </div>
+                            <h3 class="product-title">
+                                <a href="{{ route('product.details', [$product->id, $product->product_slug]) }}">{{ $product->product_name }}</a>
+                            </h3>
+                            <div class="ratings-container">
+                                <div class="product-ratings">
+                                    <span class="ratings" style="width:80%"></span>
+                                    <!-- End .ratings -->
+                                    <span class="tooltiptext tooltip-top"></span>
+                                </div>
+                                <!-- End .product-ratings -->
+                            </div>
+                            <!-- End .product-container -->
+                            
+                            <div class="price-box">
+                            @if($productVariation->discount_price == null)
+                                <span class="product-price">{{ $productVariation->selling_price }}tk</span>
+                            @else
+                                <del class="old-price">{{ $productVariation->selling_price }}tk</del>
+                                <span class="product-price">{{ $productVariation->discount_price }}tk</span>
+                            @endif
+                            </div>
+                            <!-- End .price-box -->
+                            <div class="product-action">
+                                {{-- <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i
+                                        class="icon-heart"></i></a> --}}
+                                {{-- <a href="javascript:;" class="btn-icon btn-add-cart" ><i
+                                        class="icon-shopping-cart"></i><span>ADD TO CART</span></a> --}}
+                                {{-- <a href="" class="btn-quickview" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)"><i
+                                        class="fas fa-external-link-alt"></i></a> --}}
+                                <a href="" class="btn-icon btn-add-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)">ADD TO CART</a>
+                            </div>
+                        </div>
+                        <!-- End .product-details -->
+                    </div> {{-- end product default --}}
+                    @endforeach
+
+                </div>
+                <!-- End Special Offers -->
+
+
+
+                <h2 class="section-title ls-n-10 m-b-4 appear-animate" data-animation-name="fadeInUpShorter">
+                    Special Deals</h2>
+                <div class="products-slider owl-carousel owl-theme dots-top dots-small m-b-1 pb-1 appear-animate" data-animation-name="fadeInUpShorter">
+
+
+                    @foreach ($specialDeals as $product)
+                    @php
+                        $productVariation = App\Models\ProductVariation::where('product_id', $product->id)->orderBy('discount_price')->first();
+                    @endphp
+                    <div class="product-default appear-animate" data-animation-name="fadeInRightShorter">
+                        <figure>
+                            <a href="{{ route('product.details', [$product->id, $product->product_slug]) }}">
+                                <img src="{{ asset($product->product_thumbnail) }}" width="220" height="220" alt="product">
+                            </a>
+                        @php
+                            $amount = $productVariation->selling_price- $productVariation->discount_price;
+                            $discount=null;
+                            if($amount>1){
+                                $discount = ($amount/$productVariation->selling_price)*100;
+                            }
+                        @endphp
+                        @if ($discount == null || $productVariation->discount_price==null)
+                            <div class="label-group">
+                                <div class="product-label label-hot">NEW</div>
+                            </div>
+                        @else
+                            <div class="label-group">
+                                <div class="product-label label-hot bg-danger">-{{ round($discount) }}%</div>
+                            </div>
+                        @endif
+                            
+                        </figure>
+                        <div class="product-details">
+                            <div class="category-list">
+                                <a href="category.html" class="product-category">{{ $product->category->category_name }}</a>
+                            </div>
+                            <h3 class="product-title">
+                                <a href="{{ route('product.details', [$product->id, $product->product_slug]) }}">{{ $product->product_name }}</a>
+                            </h3>
+                            <div class="ratings-container">
+                                <div class="product-ratings">
+                                    <span class="ratings" style="width:80%"></span>
+                                    <!-- End .ratings -->
+                                    <span class="tooltiptext tooltip-top"></span>
+                                </div>
+                                <!-- End .product-ratings -->
+                            </div>
+                            <!-- End .product-container -->
+                            
+                            <div class="price-box">
+                            @if($productVariation->discount_price == null)
+                                <span class="product-price">{{ $productVariation->selling_price }}tk</span>
+                            @else
+                                <del class="old-price">{{ $productVariation->selling_price }}tk</del>
+                                <span class="product-price">{{ $productVariation->discount_price }}tk</span>
+                            @endif
+                            </div>
+                            <!-- End .price-box -->
+                            <div class="product-action">
+                                {{-- <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i
+                                        class="icon-heart"></i></a> --}}
+                                {{-- <a href="javascript:;" class="btn-icon btn-add-cart" ><i
+                                        class="icon-shopping-cart"></i><span>ADD TO CART</span></a> --}}
+                                {{-- <a href="" class="btn-quickview" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)"><i
+                                        class="fas fa-external-link-alt"></i></a> --}}
+                                <a href="" class="btn-icon btn-add-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" id="{{ $product->id }}" onclick="productQuickView(this.id)">ADD TO CART</a>
+                            </div>
+                        </div>
+                        <!-- End .product-details -->
+                    </div> {{-- end product default --}}
+                    @endforeach
+
+                </div>
+                <!-- End Hot deals -->
+
+{{-- ========================================================================== --}}
+
+
                 {{-- quick view --}}
-                <div class="product-single-container product-single-default product-quick-view mb-0 custom-scrollbar">
+                {{-- <div class="product-single-container product-single-default product-quick-view mb-0 custom-scrollbar">
                     <div class="row">
                         <div class="col-md-6 product-single-gallery mb-md-0">
                             <div class="product-slider-container">
@@ -385,7 +606,7 @@ Gadget Verse | Online Gadget Shop
                             ×
                         </button>
                     </div><!-- End .row -->
-                </div><!-- End .product-single-container -->
+                </div> --}}<!-- End .product-single-container -->
                 {{-- end quick view  --}}
 
 
@@ -810,20 +1031,24 @@ Gadget Verse | Online Gadget Shop
                     $subCategories = App\Models\SubCategory::where('category_id', $category->id)->orderBy('subcategory_name','ASC')->get();
                     @endphp
                         <li>
-                            <a href="#" class="sf-with-ul"><i class="{{ $category->category_icon }}"></i>{{ $category->category_name }}</a>
-                        @if (!empty($subCategories))
+                            <a href="{{route('category.product', ['id' => $category->id, 'slug' => $category->category_slug])}}" class="{{ count($subCategories) > 0 ? 'sf-with-ul' : '' }}"><i class="{{ $category->category_icon }}"></i>{{ $category->category_name }}</a>
+                        @if (count($subCategories)>0)
                             <ul>
                             @foreach ($subCategories as $subCategory)
                                 @php
-                                $subSubCategories = App\Models\SuBSubCategory::where('subcategory_id', $subCategory->id)->orderBy('subsubcategory_name','ASC')->get();
+                                $subSubCategories = App\Models\SubSubCategory::where('subcategory_id', $subCategory->id)->orderBy('subsubcategory_name','ASC')->get();
                                 @endphp
-                                <li><a href="#">{{ $subCategory->subcategory_name }}</a>
-                                    <ul>
+                                <li><a href="{{route('subcategory.product',  ['id' => $subCategory->id, 'slug' => $subCategory->subcategory_slug])}}">{{ $subCategory->subcategory_name }}</a>
 
+                                    @if (count($subSubCategories)>0)
+
+                                    <ul>
                                     @foreach ($subSubCategories as $subSubCategory)
-                                        <li><a href="blog.html">{{ $subSubCategory->subsubcategory_name }}</a></li>
+                                        <li><a href="{{route('subsubcategory.product', ['id' => $subSubCategory->id, 'slug' => $subSubCategory->subsubcategory_slug])}}">{{ $subSubCategory->subsubcategory_name }}</a></li>
                                     @endforeach
                                     </ul>
+                                    @endif
+
                                 </li>
                             @endforeach
                             </ul>
@@ -1084,5 +1309,43 @@ Gadget Verse | Online Gadget Shop
     </div>
     <!-- End .container -->
 </main>
-@include('frontend.body.newsletter_popup')
+{{-- @include('frontend.body.newsletter_popup') --}}
+
+
+
+
+<script>
+    // Function to detect screen size and update carousel-inner structure
+    function updateCarouselInner() {
+        var carouselInner = document.getElementById('carousel-inner');
+        var indicators = document.getElementById('indicators');
+        var windowWidth = window.innerWidth;
+
+        // If window width is less than 768px (small screen), update the HTML structure
+        if (windowWidth < 768) {
+            carouselInner.innerHTML = ''; 
+            indicators.innerHTML = ''; 
+            
+            @foreach ($sliders as $i => $slider)
+                @foreach ($slider->items as $j => $item)
+                carouselInner.innerHTML += '<div class="carousel-item {{ $i + $j == 0 ? 'active' : '' }}">' +
+                    '<div class="card">' +
+                        '<img src="{{ asset($item->image_source) }}" class="d-block w-100" alt="...">' +
+                        '<div class="carousel-caption">' +
+                            '<h4 class="text-dark">{{$item->title}}</h4>' +
+                            '<p class="text-dark">{{$item->sub_title}}</p>' +
+                            '<a href="{{$item->button_link}}" class="btn btn-primary">Shop now</a>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+                @endforeach
+            @endforeach
+        }
+    }
+
+    
+    updateCarouselInner();
+    window.addEventListener('resize', updateCarouselInner);
+</script>
 @endsection

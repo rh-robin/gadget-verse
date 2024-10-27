@@ -21,13 +21,7 @@
     <div class="container my-5">
         <div class="row user-profile">
             <div class="col-md-3">
-                <img src="{{ !empty($user->profile_photo_path) ? url('upload/user_images/'.$user->profile_photo_path) : url('upload/noimage.jpg') }}" alt="" class="card-img-top mb-2" style="border-radius: 50%; height: auto;">
-                <ul class="list-group list-group-flush">
-                    <a href="{{ route('dashboard') }}" class="btn btn-primary btn-sm btn-block">Home</a>
-                    <a href="{{ route('user.profile') }}" class="btn btn-primary btn-sm btn-block">Profile Update</a>
-                    <a href="{{ route('user.changePassword') }}" class="btn btn-primary btn-sm btn-block">Change Password</a>
-                    <a href="{{ route('user.logout') }}" class="btn btn-danger btn-sm btn-block">Logout</a>
-                </ul>
+                @include('frontend.profile.user_menu')
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-8">
@@ -52,7 +46,12 @@
                               </div>
                             <div class="form-group">
                                 <label class="info-title" for="exampleInputEmail1">Phone Number <span>*</span></label>
-                                <input type="text" class="form-control unicase-form-control text-input"  id="phone" name="phone" value="{{old('phone') ?? $user->phone}}" >
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text" id="phone">+880</span>
+                                    </div>
+                                    <input type="text" class="form-control unicase-form-control text-input"  id="phone" name="phone" value="{{old('phone') ?? $user->phone}}" >
+                                </div>
                                 @error('phone')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                 @enderror
@@ -63,6 +62,14 @@
                                 @error('profile_photo_path')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            
+                            
+
+                            <div class="form-group">
+                                <label class="info-title" for="">Referral Code</label>
+                                <input type="text" class="form-control unicase-form-control text-input" id="referCode" value="{{ $user->refer_code }}" onclick="copyReferCode()" readonly>
+                                <a href="javascript:;" onclick="copyReferCode()">Copy</a>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn-upper btn btn-primary checkout-page-button">Update</button>
@@ -75,6 +82,23 @@
     </div>
     <!-- /.container --> 
 </div>
+
+
+<script>
+    function copyReferCode() {
+        // Get the input field
+        let referCodeInput = document.getElementById("referCode");
+
+        // Select the text in the input field
+        referCodeInput.select();
+
+        // Copy the selected text
+        document.execCommand("copy");
+
+        // Alert the copied text
+        alert("Refer code copied: " + referCodeInput.value);
+    }
+</script>
 
 @endsection
 

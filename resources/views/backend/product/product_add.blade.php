@@ -37,7 +37,7 @@
                         <div class="row"> {{-- start 1st row --}}
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <h5>Select Brand <span class="text-danger">*</span></h5>
+                                    <h5>Select Brand <span class="text-danger"></span></h5>
                                     <div class="controls">
                                         <select name="brand_id" id="select" class="form-control" aria-invalid="false">
                                             <option value="" selected disabled>Select Brand</option>
@@ -69,7 +69,7 @@
                             </div>{{-- end col-md-4 --}}
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <h5>Select Sub-Category <span class="text-danger">*</span></h5>
+                                    <h5>Select Sub-Category <span class="text-danger"></span></h5>
                                     <div class="controls">
                                         <select name="subcategory_id" id="select" class="form-control" aria-invalid="false">
                                             <option value="" selected disabled>Select Sub-Category</option>
@@ -85,7 +85,7 @@
                         <div class="row"> {{-- start 2nd row --}}
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <h5>Select Sub Sub-Category <span class="text-danger">*</span></h5>
+                                    <h5>Select Sub Sub-Category <span class="text-danger"></span></h5>
                                     <div class="controls">
                                         <select name="subsubcategory_id" id="select" class="form-control" aria-invalid="false">
                                             <option value="" selected disabled>Select Sub Sub-Category</option>
@@ -189,7 +189,8 @@
                                     <div class="form-control-feedback"><small class="text-danger">{{ $message }}</small></div>
                                     @enderror
                                 </div> {{-- end form group --}}
-                                <div class="video_container" style="width: 500px;">
+                                <div class="video_container" style="">
+                                    
                                 </div>
                             </div> {{-- end col-md-4 --}}
                         </div> {{-- end 6th row --}}
@@ -596,8 +597,11 @@
         // Get the video container element
         let videoContainer = document.querySelector('.video_container');
 
-        videoContainer.innerHTML=embedCode;
+        videoContainer.innerHTML=`
+        <iframe width="500" height="281.25" src="${embedCode}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        `;
         videoContainer.style.height = '281.25px';
+        videoContainer.style.width = '500px';
     }
 </script>
 

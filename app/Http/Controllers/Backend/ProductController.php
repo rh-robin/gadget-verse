@@ -38,10 +38,10 @@ class ProductController extends Controller
 		//dd($request->product_3d);
         // Validate incoming request
         $request->validate([
-            'brand_id' => 'required|exists:brands,id',
+            /* 'brand_id' => 'required|exists:brands,id', */
             'category_id' => 'required|exists:categories,id',
-            'subcategory_id' => 'required|exists:sub_categories,id',
-            'subsubcategory_id' => 'required|exists:sub_sub_categories,id',
+            /* 'subcategory_id' => 'required|exists:sub_categories,id',
+            'subsubcategory_id' => 'required|exists:sub_sub_categories,id', */
             'product_name' => 'required|string',
             'product_tags' => 'nullable|string',
             'short_desc' => 'nullable|string',
@@ -231,10 +231,10 @@ class ProductController extends Controller
 		//dd($request->all());
         // Validate incoming request
         $request->validate([
-            'brand_id' => 'required|exists:brands,id',
+            /* 'brand_id' => 'required|exists:brands,id', */
             'category_id' => 'required|exists:categories,id',
-            'subcategory_id' => 'required|exists:sub_categories,id',
-            'subsubcategory_id' => 'required|exists:sub_sub_categories,id',
+            /* 'subcategory_id' => 'exists:sub_categories,id',
+            'subsubcategory_id' => 'exists:sub_sub_categories,id', */
             'product_name' => 'required|string',
             'product_tags' => 'nullable|string',
             'short_desc' => 'nullable|string',
@@ -307,6 +307,7 @@ class ProductController extends Controller
             $product3DFile->move(public_path('upload/products/3d_model'), $fileName);
 			
 			if($product3dImage){
+				//dd("ok");
 				unlink($product3dImage->image_source);
 			}else{
 				$product3dImage = new Product3dImage();
@@ -352,18 +353,22 @@ class ProductController extends Controller
 				$productVideo->product_id = $product->id;
 			}
 			$productVideo->video_source = $file_url;
-			$productVideo->save();
+			$productVideo->update();
 		}
 		if($request->embed_code){
 			if($productVideo == null){
 				$productVideo = new ProductVideo();
 				$productVideo->product_id = $product->id;
 			}
-			$productVideo->embed_code = $request->embed_code == null ? null : $request->embed_code;
+			if(trim($request->embed_code) == ''){
+				$productVideo->embed_code = null;
+			}else{
+				$productVideo->embed_code = $request->embed_code;
+			}
 		}
 		if($productVideo !== null){
 			$productVideo->video_priority = $request->video_priority;
-			$productVideo->save();
+			$productVideo->update();
 		}
 		
 

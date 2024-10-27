@@ -62,6 +62,7 @@
                                     @else
                                 <a href="{{ route('category.active',$category->id) }}" class="btn btn-sm mx-1 btn-success" title="Active Now"><i class="fa fa-arrow-up"></i> </a>
                              @endif
+                            </td>
                         </tr>
                         @empty
                         @endforelse

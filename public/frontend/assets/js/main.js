@@ -2183,6 +2183,8 @@
 				items: 4,
 				dots: false,
 				nav: true,
+				mouseDrag: false,
+				touchDrag: false,
 				navText: [ '<i class="fas fa-chevron-left">', '<i class="fas fa-chevron-right">' ]
 			}
 

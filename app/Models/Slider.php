@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Slider extends Model
 {
-    use HasFactory;
+    use HasFactory; 
     protected $guarded = [];
+
+    public function items()
+    {
+        return $this->hasMany(SliderItem::class);
+    }
 }

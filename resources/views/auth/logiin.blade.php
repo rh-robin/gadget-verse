@@ -55,7 +55,7 @@
 <div class="col-md-6 col-sm-6 create-new-account">
 	<h4 class="checkout-subtitle">Create a new account</h4>
 	<p class="text title-tag-line">Create your new account.</p>
-	<form class="register-form outer-top-xs" role="form" method="POST" action="{{ route('register') }}">
+	<form class="register-form outer-top-xs" role="form" method="POST" action="{{ route('register') }}"> 
 		@csrf
         <div class="form-group">
 		    <label class="info-title" for="exampleInputEmail1">Name <span>*</span></label>

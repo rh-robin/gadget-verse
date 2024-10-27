@@ -11,9 +11,24 @@ class Product extends Model
     protected $guarded = [];
 
 
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+
+    public function subSubCategory()
+    {
+        return $this->belongsTo(SubSubCategory::class);
     }
 
     public function stocks(){
@@ -33,6 +48,10 @@ class Product extends Model
 
     public function productVideo(){
         return $this->hasOne(ProductVideo::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(ProductReview::class, 'product_id', 'id');
     }
     
 }
